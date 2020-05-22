@@ -1,0 +1,47 @@
+{
+  "name": "analytics-bot",
+  "version": "1.0.0",
+  "description": "📈 A typescript-based server analytics bot for Discord. ",
+  "main": "build/index.js",
+  "repository": "https://github.com/qwright10/analytics-bot.git",
+  "author": "Quentin Wright <wrightq00@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "start": "pm2 start ./ecosystem.config.js -n analytics && pm2 logs",
+    "restart": "pm2 restart analytics && pm2 logs",
+    "stop": "pm2 stop analytics"
+  },
+  "dependencies": {
+    "@types/common-tags": "^1.8.0",
+    "@types/node-fetch": "^2.5.7",
+    "chalk": "^4.0.0",
+    "chart.js": "^2.9.3",
+    "common-tags": "^1.8.0",
+    "discord-akairo": "discord-akairo/discord-akairo",
+    "discord.js": "discordjs/discord.js",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.15",
+    "md5": "^2.2.1",
+    "moment": "^2.25.1",
+    "moment-duration-format": "^2.3.2",
+    "node-fetch": "^2.6.0",
+    "pg": "^8.0.3",
+    "prompts": "^2.3.2",
+    "readdirp": "^3.4.0",
+    "redis": "^3.0.2",
+    "typeorm": "^0.2.24"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.150",
+    "@types/md5": "^2.2.0",
+    "@types/node": "^13.13.4",
+    "@types/ws": "^7.2.4",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^6.8.0",
+    "typescript": "^3.8.3"
+  }
+}
