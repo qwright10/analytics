@@ -11,7 +11,9 @@ export default class MessageReactionAddListener extends Listener {
     }
 
     public async exec(reaction: MessageReaction, user: User): Promise<any> {
-        if (reaction.emoji.name !== '🗑') return;
+        if (user.bot) return;
+
+        if (reaction.emoji.name !== '🗑️') return;
 
         /* ---- DM Channels ---- */
 
@@ -34,6 +36,5 @@ export default class MessageReactionAddListener extends Listener {
 
         // If the bot can delete the message
         if (reaction.message.guild.me?.permissions.has('MANAGE_MESSAGES')) reaction.message.delete();
-        return;
     }
 }
