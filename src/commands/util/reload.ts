@@ -27,8 +27,6 @@ export default class ReloadCommand extends Command {
             const commands = commandHandler.reloadAll().modules.size;
             const inhibitors = inhibitorHandler.reloadAll().modules.size;
             const listeners = listenerHandler.reloadAll().modules.size;
-            const { DynamoUtils } = require('../../structures/util/Util');
-            this.client.utils = new DynamoUtils(this.client);
             const embed = new MessageEmbed()
                 .addField('Commands', commands, true)
                 .addField('Inhibitors', inhibitors, true)

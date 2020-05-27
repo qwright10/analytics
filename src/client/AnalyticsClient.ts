@@ -8,7 +8,7 @@ import { MessageHandler } from './MessageHandler';
 
 import path from 'path';
 import { Logger } from '../structures/util/Logger';
-import { DynamoUtils } from '../structures/util/Util';
+import { AnalyticsUtils } from '../structures/util/AnalyticsUtils';
 
 declare module 'discord-akairo' {
     interface AkairoClient {
@@ -20,7 +20,7 @@ declare module 'discord-akairo' {
         readonly listenerHandler: ListenerHandler;
         readonly logger: typeof Logger;
         readonly settings: SettingsProvider;
-        utils: DynamoUtils;
+        utils: AnalyticsUtils;
     }
 }
 
@@ -54,17 +54,16 @@ export class AnalyticsClient extends AkairoClient {
     public readonly inhibitorHandler: InhibitorHandler = new InhibitorHandler(this, { directory: path.join(__dirname, '..', 'inhibitors') });
     public readonly listenerHandler: ListenerHandler = new ListenerHandler(this, { directory: path.join(__dirname, '..', 'listeners') });
 
-    public readonly embeds = new Map<string, string>();
-    public readonly events = new MessageHandler(this);
-    public readonly logger = Logger;
-    public readonly settings = new SettingsProvider(this);
-    public utils = new DynamoUtils(this);
+    public readonly embeds: Map<string, string> = new Map<string, string>();
+    public readonly events: MessageHandler = new MessageHandler(this);
+    public readonly logger: typeof Logger = Logger;
+    public readonly settings: SettingsProvider = new SettingsProvider(this);
+    public readonly utils: AnalyticsUtils = new AnalyticsUtils(this);
 
     public constructor(public readonly config: AnalyticsConfig) {
         super({ ownerID: config.owner }, {
             messageCacheMaxSize: Infinity,
             messageCacheLifetime: Infinity,
-            shardCount: 1,
             partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
             fetchAllMembers: true,
             ws: {
@@ -88,10 +87,7 @@ export class AnalyticsClient extends AkairoClient {
         this.logger.log(`Inhibitors loaded: ${this.inhibitorHandler.modules.size} modules`);
         this.listenerHandler.loadAll();
         this.logger.log(`Listeners loaded: ${this.listenerHandler.modules.size} modules`);
-
-        this.on('shardReady', (id: number) => this.logger.info(`Shard ${id} ready`));
-        this.on('shardDisconnect', (_event:any, id: number) => this.logger.error(`Shard ${id} disconnected`));
-        this.on('shardError', (error: Error, id: number) => this.logger.error(`Shard ${id} error: ${error}`));
+        
         this.setMaxListeners(20);
 
         await createConnection({
