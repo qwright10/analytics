@@ -85,6 +85,20 @@ export class SettingsProvider {
         return data;
     }
 
+    public update(data: [string, Settings][] | { [id: string]: Settings } | Map<string, Settings>): void {
+        if (data instanceof Map) {
+            return data.forEach((v, k) => {
+                this.cache.set(k, v);
+            });
+        } else if (data instanceof Array) {
+            return data.forEach(d => {
+                this.cache.set(d[0], d[1]);
+            });
+        } else if (data instanceof Object) {
+            return this.update(Object.entries(data));
+        }
+    }
+
     private getGuildID(guild: GuildIDResolvable): string {
         if (guild instanceof Guild) return guild.id;
         if (typeof guild === 'string') return guild;
