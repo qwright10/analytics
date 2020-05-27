@@ -1,8 +1,8 @@
-import { AnalyticsClient } from '../../client/AnalyticsClient';
+import { AkairoClient } from 'discord-akairo';
 import { Message, MessageEmbed, MessageReaction, User } from 'discord.js';
 
-export class DynamoUtils {
-    public constructor(public readonly client: AnalyticsClient) {}
+export class AnalyticsUtils {
+    public constructor(public readonly client: AkairoClient) {}
     
     public async paginate<T = { [key: string]: any }>(message: Message, data: T[], fn: (item: T) => MessageEmbed): Promise<void> {
         if (!data.length) return Promise.reject();
