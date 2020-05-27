@@ -10,4 +10,7 @@ export class Event {
 
     @Column({ name: 'data', type: 'json' })
     data!: any;
+
+    @Column({ name: 'count', type: 'bigint', nullable: true })
+    count!: number | null;
 }

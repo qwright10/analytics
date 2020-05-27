@@ -18,6 +18,9 @@ export class User {
     @Column({ name: 'guilds', type: 'json' })
     guilds!: string[];
 
+    @Column({ name: 'presences', type: 'int', nullable: true })
+    presences!: number;
+
     @Column({ name: 'joins', type: 'json' })
     joins!: { at: number; id: string }[];
 

@@ -1,6 +1,6 @@
 import { AnalyticsClient } from './AnalyticsClient';
 import { getRepository } from 'typeorm';
-import { Channel, Emoji, Event, Guild, Message, Presence, Role, User } from '../structures/db';
+import { Channel, Emoji, Event, Guild, Message, Presence, Raw, Role, User } from '../structures/db';
 import Discord from 'discord.js';
 import md5 from 'md5';
 
@@ -19,7 +19,6 @@ export class MessageHandler {
 
     public async writePresences(): Promise<void> {
         if (this.queue.length) await getRepository(Presence).insert(this.queue);
-        this.client.logger.log(`Inserted ${this.queue.length} presences`);
         this.queue = [];
     }
 
@@ -253,7 +252,7 @@ export class MessageHandler {
 
         userRecord.guilds.push(member.guild.id);
         getRepository(Event).insert(data as any);
-        getRepository(User).update(member.id, userRecord).catch(() => this.client.logger.error('User exists'));
+        getRepository(User).update(member.id, userRecord);
     }
 
     private async _guildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<void> {
@@ -309,7 +308,12 @@ export class MessageHandler {
             }
         };
 
-        getRepository(Message).insert(data).catch(() => {});
+        getRepository(Message)
+            .createQueryBuilder()
+            .insert()
+            .values(data)
+            .onConflict('DO NOTHING')
+            .execute();
     }
 
     private _messageDelete(message: Discord.Message | Discord.PartialMessage): void {
@@ -373,18 +377,22 @@ export class MessageHandler {
             } : null
         };
 
-        this.queue.push(data);
+        // this.queue.push(data);
+        getRepository(Presence).insert(data);
+        getRepository(User).increment({ id: newPresence.userID }, 'presences', 1);
     }
 
-    private _raw(message: any): void {
+    private async _raw(message: any): Promise<any> {
+        const count = await getRepository(Raw).count({ op: message.op, t: message.t });
+        if (count > 0) return getRepository(Raw).increment({ op: message.op, t: message.t }, 'count', 1);
+
         const data = {
-            type: message.t || message.op,
-            data: {
-                at: Date.now(),
-            }
+            time: dateToPG(new Date()),
+            op: message.op,
+            t: message.t
         };
 
-        getRepository(Event).insert(data as any);
+        getRepository(Raw).insert(data);
     }
 
     private _roleCreate(role: Discord.Role): void {
