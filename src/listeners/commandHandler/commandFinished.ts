@@ -16,7 +16,11 @@ export default class MessageListener extends Listener {
         this.client.embeds.set(message.author.id, returnValue.id);
         const reaction = await returnValue.react('🗑️');
         setTimeout(() => {
-            this.client.embeds.delete(message.author.id);
+            if (reaction.message.deleted) {
+                this.client.embeds.delete(reaction.message.id);
+                return;
+            }
+
             reaction.users.remove(this.client.user!);
         }, 10000);
     }

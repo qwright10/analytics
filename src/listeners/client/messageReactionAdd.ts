@@ -25,10 +25,14 @@ export default class MessageReactionAddListener extends Listener {
 
         /* ---- Guild Channels ---- */
 
-        // If both the reactor and bot can delete messages
+        // If bot can't delete messages
+        if (!reaction.message.guild.me?.permissions.has('MANAGE_MESSAGES')
+            && reaction.message.author.id !== this.client.user?.id) return;
+        
         if (
-            reaction.message.guild.member(user)?.permissions.has('MANAGE_MESSAGES')
-            && reaction.message.guild.me?.permissions.has('MANAGE_MESSAGES')
+            this.client.embeds.has(reaction.message.id)
+            || reaction.message.member?.permissions.has('MANAGE_MESSAGES')
+            || this.client.isOwner(user.id)
         ) return reaction.message.delete();
 
         // If the "author" of the embed is not the reactor
