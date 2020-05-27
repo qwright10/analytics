@@ -3,7 +3,6 @@ import moment from 'moment';
 import util from 'util';
 
 const items: string[] = [];
-const format = '{ts}|{tg}  {txt}\n';
 
 export class Logger {
     public get items() {
@@ -27,11 +26,11 @@ export class Logger {
         const tag = `[${label}]`;
         const text = typeof content === 'string' ? content :util.inspect(content, { depth: 3 });
         const stream = error ? process.stderr : process.stdout;
-        const item = format
+        const item = '{ts}|{tg}'
             .replace('{ts}', chalk.cyan(timestamp))
             .replace('{tg}', chalk.bold(tag))
-            // @ts-ignore
-            .replace('{txt}', chalk[color](text));
+            .padEnd(49, ' ')
+            .concat((chalk as any)[color!](text), '\n');
         items.push(item);
         stream.write(item);
     }
