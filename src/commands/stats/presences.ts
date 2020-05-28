@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, User } from 'discord.js';
-import { getConnection, /* getRepository */ } from 'typeorm';
-import { PresenceCount } from '../../structures/db/';
+import { getConnection, getRepository } from 'typeorm';
+import { PresenceCount, User as UEntity } from '../../structures/db/';
 
 export default class PresencesCommand extends Command {
     public constructor() {
@@ -28,12 +28,18 @@ export default class PresencesCommand extends Command {
             .createQueryBuilder()
             .select('c')
             .from(PresenceCount, 'presence_count')
-            .execute();
-        const userPresences = 5; // await getRepository(Presence).count({ id: user.id }).then(r => r.toLocaleString());
+            .execute()
+            .then(r => parseInt(r[0]?.c)?.toLocaleString());
+        const userPresences = await getRepository(UEntity)
+            .createQueryBuilder()
+            .select('presences')
+            .where('id = :id', { id: user.id })
+            .execute()
+            .then(r => r[0]?.presences?.toLocaleString());
         const embed = new MessageEmbed()
             .setTitle(`Stats for ${user.username}`)
-            .addField('Total Presence Updates', totalPresences[0]?.c.toLocaleString() ?? 'Unknown')
-            .addField('User Presence Updates', userPresences)
+            .addField('Total Presence Updates', totalPresences ?? 'Unknown')
+            .addField('User Presence Updates', userPresences ?? 'Unknown')
             .setFooter(message.author.tag, message.author.displayAvatarURL())
             .setTimestamp();
         return message.util!.send(embed);
