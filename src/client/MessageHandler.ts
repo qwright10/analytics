@@ -377,7 +377,6 @@ export class MessageHandler {
             } : null
         };
 
-        // this.queue.push(data);
         getRepository(Presence).insert(data);
         getRepository(User).increment({ id: newPresence.userID }, 'presences', 1);
     }
