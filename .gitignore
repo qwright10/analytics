@@ -4,5 +4,5 @@ build
 *.code-workspace
 *.config.js
 .vscode
-setup.js
 logs
+.eslintrc.json
