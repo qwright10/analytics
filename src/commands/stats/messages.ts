@@ -2,7 +2,7 @@ import { Command, Argument } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import { getRepository } from 'typeorm';
 import { Message as MEntity } from '../../structures/db/';
-import md5 from 'md5';
+import sha1 from 'sha1';
 
 export default class MessagesCommand extends Command {
     public constructor() {
@@ -36,11 +36,11 @@ export default class MessagesCommand extends Command {
 
     public async exec(message: Message, { content, channel, user }: { content: string | null, channel: any, user: any }): Promise<Message | Message[] | void> {
         if (content) {
-            const results = await getRepository(MEntity).find({ content: md5(content) });
+            const results = await getRepository(MEntity).find({ content: sha1(content) });
             if (!results.length) return message.util!.send('No results found');
             let index = 0;
             const author = await this.client.users.fetch(results[index].author).catch(() => null);
-            return this.client.utils.paginate(message, results, (item) => {
+            return this.client.utils.paginate(message, results, (item, index) => {
                 return new MessageEmbed()
                     .setTitle(`${results.length} results`)
                     .addField('Content Hash', item.content)
@@ -48,7 +48,7 @@ export default class MessagesCommand extends Command {
                     .addField('Deleted', item.deleted ? 'Yes' : 'No')
                     .addField('Sent At', new Date(item.createdAt).toLocaleString())
                     .addField('Edits', `Content: ${item.edits.content.length} Embeds: ${item.edits.embeds.length}`)
-                    .setFooter(message.author.tag, message.author.displayAvatarURL());
+                    .setFooter(`${index + 1} of ${results.length}`, message.author.displayAvatarURL());
             });
         }
         

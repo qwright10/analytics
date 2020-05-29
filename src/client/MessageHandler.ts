@@ -2,7 +2,7 @@ import { AnalyticsClient } from './AnalyticsClient';
 import { getRepository } from 'typeorm';
 import { Channel, Emoji, Event, Guild, Message, Presence, Raw, Role, User } from '../structures/db';
 import Discord from 'discord.js';
-import md5 from 'md5';
+import sha1 from 'sha1';
 
 export const presenceSymbol = Symbol('presences');
 
@@ -104,7 +104,7 @@ export class MessageHandler {
             }
         };
 
-        getRepository(Channel).insert(data);
+        getRepository(Channel).save(data);
     }
 
     private _channelDelete(channel: Discord.Channel): void {
@@ -297,7 +297,8 @@ export class MessageHandler {
             author: message.author.id,
             channel: message.channel.id,
             guild: message.guild?.id || null,
-            content: md5(message.content),
+            content: sha1(message.content),
+            rawContent: message.content,
             deleted: false,
             createdAt: message.createdAt.toISOString().replace('T', ' ').replace('Z', ''),
             embeds: message.embeds.map(e => e.toJSON()),
@@ -308,12 +309,7 @@ export class MessageHandler {
             }
         };
 
-        getRepository(Message)
-            .createQueryBuilder()
-            .insert()
-            .values(data)
-            .onConflict('DO NOTHING')
-            .execute();
+        getRepository(Message).insert(data);
     }
 
     private _messageDelete(message: Discord.Message | Discord.PartialMessage): void {
@@ -349,11 +345,13 @@ export class MessageHandler {
     private async _messageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage): Promise<void> {
         if (newMessage.partial) await newMessage.fetch();
         const record = await getRepository(Message).findOne(oldMessage.id);
-        if (!record) return console.log('Message not found');
+        if (!record) return;
 
-        if (record.content !== md5(newMessage.content!)) {
-            record.edits.content.push({ at: Date.now(), from: record.content, to: md5(newMessage.content!) });
-            record.content = md5(newMessage.content!);
+        const hash = sha1(newMessage.content!);
+
+        if (record.content !== hash) {
+            record.edits.content.push({ at: Date.now(), from: record.content, to: sha1(newMessage.content!) });
+            record.content = hash;
         }
         if (record.embeds !== newMessage.embeds!.map(e => e.toJSON())) {
             record.edits.embeds.push({ at: Date.now(), from: record.embeds, to: newMessage.embeds!.map(e => e.toJSON()) });
