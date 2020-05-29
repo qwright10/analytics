@@ -4,10 +4,10 @@ import { Message, MessageEmbed, MessageReaction, User } from 'discord.js';
 export class AnalyticsUtils {
     public constructor(public readonly client: AkairoClient) {}
     
-    public async paginate<T = { [key: string]: any }>(message: Message, data: T[], fn: (item: T) => MessageEmbed): Promise<void> {
+    public async paginate<T = { [key: string]: any }>(message: Message, data: T[], fn: (item: T, index: number) => MessageEmbed): Promise<void> {
         if (!data.length) return Promise.reject();
         let index = 0, max = data.length - 1;
-        const embed = fn(data[index]);
+        const embed = fn(data[index], index);
         if (!(embed instanceof MessageEmbed)) return Promise.reject();
         const m = await message.util!.sendNew(embed);
         const filter = (_: any, u: User) => message.author.id === u.id;
@@ -15,15 +15,14 @@ export class AnalyticsUtils {
         await m.react('➡');
         const collector = m.createReactionCollector(filter, { max: 10, time: 30e3 });
         const update = (r: MessageReaction): any => {
-            console.log(r.emoji.name);
             if (r.emoji.name === '⬅') {
                 index === 0 ? index = max : index--;
-                const embed = fn(data[index]);
+                const embed = fn(data[index], index);
                 return m.edit('', embed);
             }
             if (r.emoji.name === '➡') {
                 index === max ? index = 0 : index++;
-                const embed = fn(data[index]);
+                const embed = fn(data[index], index);
                 return m.edit('', embed);
             }
         };
@@ -41,5 +40,18 @@ export class AnalyticsUtils {
         if (/(y|yes)/i.test(first.content)) return true;
         if (/(n|no)/i.test(first.content)) return false;
         return null;
+    }
+
+    public async upload(text: string): Promise<string> {
+        return await fetch('https://hasteb.in/documents', {
+            method: 'POST',
+            body: text
+        })
+            .then(r => r.json())
+            .then(r => {
+                if (!r) return Promise.reject('Invalid hastebin response');
+                if (!r[0]?.key) return Promise.reject('Document key not found');
+                return `https://hasteb.in/${r[0].key}`;
+            });
     }
 }
