@@ -31,7 +31,7 @@ export class Logger {
         const item = '{ts}|{tg}'
             .replace('{ts}', chalk.cyan(timestamp))
             .replace('{tg}', chalk.bold(tag))
-            .padEnd(49, ' ')
+            .concat(' '.repeat(6 - label!.length ))
             .concat((chalk as any)[color!](text), '\n');
 
         const logitem = `${timestamp}|${tag}`.padEnd(30, ' ').concat(text, '\n');

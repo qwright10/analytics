@@ -20,7 +20,7 @@ export default class StatsCommand extends Command {
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {
-        const msg = await message.channel.send('> Fetching stats...');
+        const msg = await message.util!.send('> Fetching stats...');
         const cpu = `CPU: ${os.cpus()[0].model}`;
         const ramstats = [os.freemem() / 1024 / 1024 / 1024, os.totalmem() / 1024 / 1024 / 1024];
         const ram = `RAM: ${ramstats[0].toFixed(2)}GB of ${ramstats[1].toFixed(2)}GB`;
@@ -68,7 +68,7 @@ export default class StatsCommand extends Command {
             \`\`\``)
             .addField('GitHub', 'https://github.com/qwright10/analytics.git');
 
-        return msg.edit('', embed);
+        return msg.edit(embed);
     }
 }
 
