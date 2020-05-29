@@ -21,6 +21,9 @@ export class Message {
     @Column({ name: 'content', type: 'text' })
     content!: string;
 
+    @Column({ name: 'rawContent', type: 'text' })
+    rawContent!: string;
+
     @Column({ name: 'deleted', type: 'boolean' })
     deleted!: boolean;
 
