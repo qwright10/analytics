@@ -1,10 +1,6 @@
 import { Command, Argument } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import util from 'util';
-import fetch from 'node-fetch';
-// @ts-ignore
-import { getConnection } from 'typeorm';
-getConnection;
 
 export default class EvalCommand extends Command {
     public hrStart?: [number, number];
@@ -17,6 +13,11 @@ export default class EvalCommand extends Command {
             clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
             ownerOnly: true,
             args: [
+                {
+                    id: 'awaitRes',
+                    match: 'flag',
+                    flag: 'await'
+                },
                 {
                     id: 'code',
                     match: 'rest',
@@ -34,12 +35,12 @@ export default class EvalCommand extends Command {
         });
     }
 
-    public async exec(message: Message, { code }: { code: string }): Promise<Message | Message[]> {
+    public async exec(message: Message, { awaitRes, code }: { awaitRes: boolean; code: string }): Promise<Message | Message[]> {
         let hrDiff, result;
         try {
             this.hrStart = process.hrtime();
             result = eval(code);
-            if (result instanceof Promise) result = await result;
+            if (result instanceof Promise && awaitRes) result = await result;
             hrDiff = process.hrtime(this.hrStart);
         } catch (error) {
             return message.util!.send(`Error while evaluating: \`${error}\``);
@@ -52,15 +53,15 @@ export default class EvalCommand extends Command {
     private async _process(result: any, hrDiff: [number, number], code: string): Promise<MessageEmbed> {
         const inspected = util.inspect(result, { depth: 1 });
         if (inspected.length > 1000) {
-            const res = await fetch('https://hastebin.com/documents', {
-                method: 'POST',
-                body: inspected
-            }).then(r => r.json()).catch(this.client.logger.error);
-            if (!res) return new MessageEmbed().setDescription('Something went wrong.');
-            if (!res.key) return new MessageEmbed().setDescription('Hastebin.com returned an invalid response');
-            return new MessageEmbed()
-                .setURL(`https://hastebin.com/${res.key}.js`)
-                .setDescription(`https://hastebin.com/${res.key}.js`);
+            return this.client.utils.upload(inspected)
+                .then(url =>
+                    new MessageEmbed()
+                        .setURL(url)
+                        .setDescription(url)
+                )
+                .catch(reason => 
+                    new MessageEmbed().setDescription(reason)
+                );
         }
 
         return new MessageEmbed()
