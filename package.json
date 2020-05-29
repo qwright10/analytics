@@ -24,7 +24,6 @@
     "discord.js": "discordjs/discord.js",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
-    "md5": "^2.2.1",
     "moment": "^2.25.1",
     "moment-duration-format": "^2.3.2",
     "node-fetch": "^2.6.0",
@@ -32,12 +31,13 @@
     "prompts": "^2.3.2",
     "readdirp": "^3.4.0",
     "redis": "^3.0.2",
+    "sha1": "^1.1.1",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.153",
-    "@types/md5": "^2.2.0",
     "@types/node": "^14.0.5",
+    "@types/sha1": "^1.1.2",
     "@types/ws": "^7.2.4",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
