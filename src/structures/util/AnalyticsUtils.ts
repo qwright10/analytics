@@ -1,5 +1,6 @@
 import { AkairoClient } from 'discord-akairo';
 import { Message, MessageEmbed, MessageReaction, User } from 'discord.js';
+import fetch from 'node-fetch';
 
 export class AnalyticsUtils {
     public constructor(public readonly client: AkairoClient) {}
@@ -50,8 +51,8 @@ export class AnalyticsUtils {
             .then(r => r.json())
             .then(r => {
                 if (!r) return Promise.reject('Invalid hastebin response');
-                if (!r[0]?.key) return Promise.reject('Document key not found');
-                return `https://hasteb.in/${r[0].key}`;
+                if (!r.key) return Promise.reject('Document key not found');
+                return `https://hasteb.in/${r.key}`;
             });
     }
 }

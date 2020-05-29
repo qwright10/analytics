@@ -27,7 +27,7 @@ export default class ExecCommand extends Command {
         return exec(code, { windowsHide: true }, async (err, stdout): Promise<Message | Message[]> => {
             hrTime = process.hrtime(hrTime);
             let result = (err ?? stdout) as string;
-            if (result.length > 1950) {
+            if (result.length > 1000) {
                 return this.client.utils.upload(result)
                     .then(url =>
                         message.util!.send(
