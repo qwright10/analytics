@@ -1,16 +1,8 @@
 import chalk from 'chalk';
 import moment from 'moment';
 import util from 'util';
-import path from 'path';
-import fs from 'fs';
-
-const items: string[] = [];
 
 export class Logger {
-    public get items() {
-        return items;
-    }
-
     public static log(content: any, { color, label } = { color: 'grey', label: 'Log' }): void {
         Logger.write(content, { color, label });
     }
@@ -33,12 +25,6 @@ export class Logger {
             .replace('{tg}', chalk.bold(tag))
             .concat(' '.repeat(6 - label!.length ))
             .concat((chalk as any)[color!](text), '\n');
-
-        const logitem = `${timestamp}|${tag}`.padEnd(30, ' ').concat(text, '\n');
-        const uri = path.join(__dirname, '..', '..', '..', 'logs', error ? 'error.log' : 'info.log');
-        fs.promises.appendFile(uri, logitem);
-
-        items.push(item);
         stream.write(item);
     }
 }
