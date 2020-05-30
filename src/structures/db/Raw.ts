@@ -5,9 +5,6 @@ export class Raw {
     @PrimaryGeneratedColumn({ name: 'uid' })
     uid!: number;
 
-    @Column({ name: 'time', type: 'timestamp without time zone' })
-    time!: string;
-
     @Column({ name: 'op', type: 'smallint', nullable: true })
     op!: number | null;
 
