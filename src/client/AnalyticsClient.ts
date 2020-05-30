@@ -97,13 +97,7 @@ export class AnalyticsClient extends AkairoClient {
             entities: Entities,
             synchronize: true,
             logging: false,
-            cache: {
-                type: 'redis',
-                options: {
-                    host: 'localhost',
-                    port: 6379
-                }
-            }
+            cache: true
         }).catch((e): any => {
             this.logger.error(`Failed to connect to postgres db:\n${e}`);
             return process.exit(1);
