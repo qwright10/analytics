@@ -1,5 +1,5 @@
 {
-  "name": "analytics-bot",
+  "name": "analytics",
   "version": "1.0.0",
   "description": "📈 A typescript-based server analytics bot for Discord. ",
   "main": "build/index.js",
