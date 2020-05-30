@@ -8,8 +8,8 @@ export const presenceSymbol = Symbol('presences');
 
 export class MessageHandler {
     public readonly client: AnalyticsClient;
-    public cache = new Map<string, any>();
-    public queue: any[] = [];
+    public readonly cache = new Map<string, any>();
+    public readonly queue: any[] = [];
     public readonly intervals = new Map<Symbol, NodeJS.Timeout>();
 
     public constructor(client: AnalyticsClient) {
@@ -19,7 +19,7 @@ export class MessageHandler {
 
     public async writePresences(): Promise<void> {
         if (this.queue.length) await getRepository(Presence).insert(this.queue);
-        this.queue = [];
+        this.queue.length = 0;
     }
 
     public registerAll(): void {
@@ -131,7 +131,14 @@ export class MessageHandler {
             record.parent = oldChannel.parentID;
         }
         if (oldChannel instanceof Discord.GuildChannel && oldChannel.permissionOverwrites !== record.permissionOverwrites) {
-            permissionOverwrites.push({ at: Date.now(), from: record.permissionOverwrites!, to: (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON() });
+            getRepository(Event).insert({
+                type: 'PERMISSION_OVERWRITES',
+                data: {
+                    at: Date.now(),
+                    from: record.permissionOverwrites,
+                    to: (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON()
+                }
+            } as any);
             record.permissionOverwrites = (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON();
         }
         if (oldChannel instanceof Discord.TextChannel && oldChannel.topic !== record.topic) {
@@ -380,16 +387,12 @@ export class MessageHandler {
     }
 
     private async _raw(message: any): Promise<any> {
-        const count = await getRepository(Raw).count({ op: message.op, t: message.t });
-        if (count > 0) return getRepository(Raw).increment({ op: message.op, t: message.t }, 'count', 1);
-
         const data = {
-            time: dateToPG(new Date()),
             op: message.op,
             t: message.t
         };
 
-        getRepository(Raw).insert(data);
+        getRepository(Raw).increment(data, 'count', 1);
     }
 
     private _roleCreate(role: Discord.Role): void {
@@ -453,6 +456,6 @@ export class MessageHandler {
     }
 }
 
-function dateToPG(date: Date): string {
+function dateToPG(date: Date = new Date()): string {
     return date.toISOString().replace('T', ' ').replace('Z', '');
 }
