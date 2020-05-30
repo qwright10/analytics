@@ -95,8 +95,8 @@ export class AnalyticsClient extends AkairoClient {
             url: process.env.pg,
             type: 'postgres',
             entities: Entities,
-            synchronize: true,
-            logging: false,
+            synchronize: !!process.env.pgsync,
+            logging: !!process.env.pglog,
             cache: true
         }).catch((e): any => {
             this.logger.error(`Failed to connect to postgres db:\n${e}`);
