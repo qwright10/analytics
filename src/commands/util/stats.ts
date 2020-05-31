@@ -5,8 +5,6 @@ import moment from 'moment';
 import 'moment-duration-format';
 import { stripIndents } from 'common-tags';
 import { execSync } from 'child_process';
-import { getRepository } from 'typeorm';
-import { Channel, Guild, User } from '../../structures/db';
 
 export default class StatsCommand extends Command {
     public constructor() {
@@ -20,7 +18,6 @@ export default class StatsCommand extends Command {
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {
-        const msg = await message.util!.send('> Fetching stats...');
         const cpu = `CPU: ${os.cpus()[0].model}`;
         const ramstats = [os.freemem() / 1024 / 1024 / 1024, os.totalmem() / 1024 / 1024 / 1024];
         const ram = `RAM: ${ramstats[0].toFixed(2)}GB of ${ramstats[1].toFixed(2)}GB`;
@@ -33,9 +30,18 @@ export default class StatsCommand extends Command {
         const akairo = `Akairo: v${Akairo.version}`;
         const commit = execSync(`cd '${__dirname}'; git rev-parse HEAD`, { shell: 'powershell', windowsHide: true }).toString();
 
-        const guilds = await getRepository(Guild).count();
-        const channels = await getRepository(Channel).count();
-        const members = await getRepository(User).count();
+        const guilds = await this.client.shard!.fetchClientValues('guilds.cache.size')
+            .then(r => 
+                r.reduce((a, b) => a + b, 0)
+            );
+        const channels = await this.client.shard!.fetchClientValues('channels.cache.size')
+            .then(r => 
+                r.reduce((a, b) => a + b, 0)
+            );
+        const members = await this.client.shard!.broadcastEval('this.guilds.cache.reduce((a, b) => a + b.memberCount, 0)')
+            .then(r => 
+                r.reduce((a, b) => a + b, 0)
+            );
         const shardStatus = await this.client.shard!.fetchClientValues('ws.shards')
             .then(r => 
                 r.reduce((a, b) =>
@@ -68,7 +74,7 @@ export default class StatsCommand extends Command {
             \`\`\``)
             .addField('GitHub', 'https://github.com/qwright10/analytics.git');
 
-        return msg.edit(embed);
+        return message.channel.send(embed);
     }
 }
 
