@@ -9,11 +9,13 @@ import { MessageHandler } from './MessageHandler';
 import path from 'path';
 import { Logger } from '../structures/util/Logger';
 import { AnalyticsUtils } from '../structures/util/AnalyticsUtils';
+import DBL from 'dblapi.js';
 
 declare module 'discord-akairo' {
     interface AkairoClient {
         readonly commandHandler: CommandHandler;
         readonly config: AnalyticsConfig;
+        readonly dbl: DBL;
         readonly embeds: Map<string, string>;
         readonly events: MessageHandler;
         readonly inhibitorHandler: InhibitorHandler;
@@ -54,6 +56,7 @@ export class AnalyticsClient extends AkairoClient {
     public readonly inhibitorHandler: InhibitorHandler = new InhibitorHandler(this, { directory: path.join(__dirname, '..', 'inhibitors') });
     public readonly listenerHandler: ListenerHandler = new ListenerHandler(this, { directory: path.join(__dirname, '..', 'listeners') });
 
+    public readonly dbl: DBL = new DBL(process.env.dbl!, this);
     public readonly embeds: Map<string, string> = new Map<string, string>();
     public readonly events: MessageHandler = new MessageHandler(this);
     public readonly logger: typeof Logger = Logger;
