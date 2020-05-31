@@ -20,6 +20,7 @@
     "chalk": "^4.0.0",
     "chart.js": "^2.9.3",
     "common-tags": "^1.8.0",
+    "dblapi.js": "^2.4.0",
     "discord-akairo": "discord-akairo/discord-akairo",
     "discord.js": "discordjs/discord.js",
     "dotenv": "^8.2.0",
