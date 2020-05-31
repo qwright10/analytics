@@ -30,6 +30,6 @@ Apu's Analytics is up almost 100% of the time and numerous updates to performanc
 
 ## Invite
 [**Discord**](https://discord.com/api/oauth2/authorize?client_id=586995575686168595&permissions=18496&scope=bot)
-ed and, therefore, cannot be copied, modified, redistributed, or sold in any way, shape, or form.***
+This bot is licensed under the MIT license. Refer to the [LICENSE](https://github.com/qwright10/analytics/blob/master/LICENSE) file for more 
 
 ### Made by @wrightq00#0001
