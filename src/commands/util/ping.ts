@@ -13,7 +13,6 @@ export default class PingCommand extends Command {
     }
 
     public async exec(message: Message): Promise<Message> {
-        const m = await message.channel.send('Pinging...');
-        return m.edit(`🏓 ${Math.round(this.client.ws.ping)}ms`);
+        return message.util!.send(`🏓 ${Math.round(this.client.ws.ping)}ms`);
     }
 }
