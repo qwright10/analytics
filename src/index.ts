@@ -5,7 +5,7 @@ require('dotenv').config({ path: `${__dirname}/../.env` });
 const options = {
     totalShards: parseInt(process.env.shards ?? '2'),
     respawn: true,
-    mode: 'worker',
+    mode: 'process',
     execArgv: ['--expose-gc', '--trace-warnings', '--max_old_space_size=24576', '--experimental-worker', '--inspect']
 };
 
