@@ -38,7 +38,7 @@ export default class ChannelCommand extends Command {
                 .addField('Message Count', messages)
                 .addField('Parent ID', channel.parent);
             if (guildRecord) embed.addField('Guild (ID)', `${guildRecord.name} (${guildRecord.id})`);
-            embed.addField('Topic', channel.topic ?? 'None')
+            embed.addField('Topic', channel.topic || 'None')
                 .addField('Created At', new Date(channel.createdAt).toLocaleString());
             return message.util!.send(embed);
         }
@@ -50,7 +50,7 @@ export default class ChannelCommand extends Command {
             .addField('Type', type)
             .addField('Parent ID', parent);
         if (guild) embed.addField('Guild (ID)', `${guild.name} (${guild.id})`);
-        embed.addField('Topic', topic ?? 'None')
+        embed.addField('Topic', topic || 'None')
             .addField('Created At', channel.createdAt.toLocaleString());
         return message.util!.send(embed);
     }
