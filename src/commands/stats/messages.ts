@@ -1,4 +1,4 @@
-import { Command, Argument } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import { getRepository } from 'typeorm';
 import { Message as MEntity } from '../../structures/db/';
@@ -17,13 +17,15 @@ export default class MessagesCommand extends Command {
             args: [
                 {
                     id: 'channel',
-                    type: Argument.union('textChannel', 'user'),
-                    default: (message: Message) => message.channel
+                    type: 'textChannel',
+                    default: (message: Message) => message.channel,
+                    unordered: true
                 },
                 {
                     id: 'user',
-                    type: Argument.union('textChannel', 'user'),
-                    default: (message: Message) => message.author
+                    type: 'user',
+                    default: (message: Message) => message.author,
+                    unordered: true
                 },
                 {
                     id: 'content',
@@ -34,7 +36,7 @@ export default class MessagesCommand extends Command {
         });
     }
 
-    public async exec(message: Message, { content, channel, user }: { content: string | null, channel: any, user: any }): Promise<Message | Message[] | void> {
+    public async exec(message: Message, { content, channel, user }: { content: string | null, channel: TextChannel, user: User }): Promise<Message | Message[] | void> {
         if (content) {
             const results = await getRepository(MEntity).find({ content: sha1(content) });
             if (!results.length) return message.util!.send('No results found');
@@ -52,9 +54,6 @@ export default class MessagesCommand extends Command {
             });
         }
         
-        if (channel instanceof TextChannel && user instanceof TextChannel) user = message.author;
-        if (channel instanceof User && user instanceof User) channel = message.channel as TextChannel;
-        if (channel instanceof User && user instanceof TextChannel) { let tmp = channel; channel = user; user = tmp; }
         if (!channel.guild || channel.guild.id !== message.guild?.id) return message.util!.send('This can only be used with text channels from this guild.');
 
         const guildMessages = await getRepository(MEntity).count({ guild: message.guild!.id });
