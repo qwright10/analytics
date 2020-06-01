@@ -34,7 +34,7 @@ interface AnalyticsConfig {
 export class AnalyticsClient extends AkairoClient {
     public readonly commandHandler: CommandHandler = new CommandHandler(this, {
         directory: path.join(__dirname, '..', 'commands'),
-        prefix: async (message: Message): Promise<string> => await this.settings.get(message.guild ?? '0', 'prefix', process.env.prefix),
+        prefix: async (message: Message): Promise<string> => await this.settings.get(message.guild ?? '0', 'prefix', process.env.prefix ?? 'apu'),
         allowMention: true,
         handleEdits: true,
         commandUtil: true,
