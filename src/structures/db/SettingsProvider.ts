@@ -18,9 +18,11 @@ export class SettingsProvider {
         return this;
     }
 
-    public async get(guild: GuildIDResolvable, query: string, defaultValue: any): Promise<any>;
-    public async get(guild: GuildIDResolvable, queries: string[], defaultValue: any): Promise<any[]>;
-    public async get(guild: GuildIDResolvable, query: string | string[], defaultValue: any): Promise<any> {
+    public async get<T = any>(guild: GuildIDResolvable, query: string): Promise<T>;
+    public async get<T = any>(guild: GuildIDResolvable, query: string[]): Promise<T[]>;
+    public async get<T = any>(guild: GuildIDResolvable, query: string, defaultValue: T): Promise<T>;
+    public async get<T = any>(guild: GuildIDResolvable, queries: string[], defaultValue: T): Promise<T[]>;
+    public async get<T = any>(guild: GuildIDResolvable, query: string | string[], defaultValue?: T): Promise<any> {
         const id = this.getGuildID(guild);
         if (!this.cache.has(id)) await this.cacheOne(id);
 
