@@ -1,6 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, User } from 'discord.js';
-import { getConnection, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { PresenceCount, User as UEntity } from '../../structures/db/';
 
 export default class PresencesCommand extends Command {
@@ -24,10 +24,10 @@ export default class PresencesCommand extends Command {
     }
 
     public async exec(message: Message, { user }: { user: User }): Promise<Message | Message[]> {
-        const totalPresences = await getConnection()
+        const totalPresences = await getRepository(PresenceCount)
             .createQueryBuilder()
             .select('c')
-            .from(PresenceCount, 'presence_count')
+            .take(1)
             .execute()
             .then(r => parseInt(r[0]?.c)?.toLocaleString());
         const userPresences = await getRepository(UEntity)
