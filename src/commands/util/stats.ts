@@ -1,5 +1,7 @@
 import Akairo, { Command } from 'discord-akairo';
 import Discord, { Message, MessageEmbed, WebSocketShard } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
+
 import os from 'os';
 import moment from 'moment';
 import 'moment-duration-format';
@@ -8,13 +10,7 @@ import { execSync } from 'child_process';
 
 export default class StatsCommand extends Command {
     public constructor() {
-        super('stats', {
-            aliases: ['about', 'info', 'stats'],
-            description: 'Gets info about this bot.',
-            category: 'info',
-            cooldown: 5000,
-            ratelimit: 1
-        });
+        super('stats', Constants.commands.stats);
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {

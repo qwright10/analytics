@@ -1,15 +1,10 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class PingCommand extends Command {
     public constructor() {
-        super('ping', {
-            aliases: ['ping', 'pong'],
-            description: 'Gets the latency to Discord\'s API',
-            category: 'util',
-            clientPermissions: ['SEND_MESSAGES'],
-            ratelimit: 2
-        });
+        super('ping', Constants.commands.ping);
     }
 
     public async exec(message: Message): Promise<Message> {

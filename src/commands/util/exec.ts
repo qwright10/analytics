@@ -1,25 +1,11 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 import { exec } from 'child_process';
 
 export default class ExecCommand extends Command {
     public constructor() {
-        super('exec', {
-            aliases: ['e', 'exec'],
-            description: 'Executes commands in cmd.exe.',
-            category: 'util',
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            ownerOnly: true,
-            args: [
-                {
-                    id: 'code',
-                    match: 'rest',
-                    prompt: {
-                        start: (message: Message): string => `${message.author}, what would you like to execute?`
-                    }
-                }
-            ]
-        });
+        super('exec', Constants.commands.exec);
     }
 
     public async exec(message: Message, { code }: { code: string }): Promise<any> {

@@ -18,8 +18,8 @@ export class SettingsProvider {
         return this;
     }
 
-    public async get<T = any>(guild: GuildIDResolvable, query: string): Promise<T>;
-    public async get<T = any>(guild: GuildIDResolvable, query: string[]): Promise<T[]>;
+    public async get<T = any>(guild: GuildIDResolvable, query: string): Promise<T | undefined>;
+    public async get<T = any>(guild: GuildIDResolvable, query: string[]): Promise<T[] | undefined>;
     public async get<T = any>(guild: GuildIDResolvable, query: string, defaultValue: T): Promise<T>;
     public async get<T = any>(guild: GuildIDResolvable, queries: string[], defaultValue: T): Promise<T[]>;
     public async get<T = any>(guild: GuildIDResolvable, query: string | string[], defaultValue?: T): Promise<any> {

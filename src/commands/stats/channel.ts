@@ -1,26 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Channel, Message, MessageEmbed } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 import { getRepository } from 'typeorm';
 import { Channel as CEntity, Guild as GEntity, Message as MEntity } from '../../structures/db';
 
 export default class ChannelCommand extends Command {
     public constructor() {
-        super('channel', {
-            aliases: ['channel', 'channels'],
-            description: 'Provides statistics about channels',
-            category: 'stats',
-            channel: 'guild',
-            cooldown: 5000,
-            ratelimit: 1,
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            args: [
-                {
-                    id: 'channel',
-                    type: 'channel',
-                    default: (message: Message) => message.channel
-                }
-            ]
-        });
+        super('channel', Constants.commands.channel);
     }
 
     public async exec(message: Message, { channel }: { channel: Channel }): Promise<Message | Message[]> {

@@ -1,13 +1,10 @@
 import { Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class MessageListener extends Listener {
     public constructor() {
-        super('commandFinished', {
-            event: 'commandFinished',
-            emitter: 'commandHandler',
-            category: 'client'
-        });
+        super('commandFinished', Constants.listeners.commandFinished);
     }
 
     public async exec(message: Message, _: any, __: any, returnValue: any): Promise<any> {

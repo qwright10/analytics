@@ -1,17 +1,10 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class PrefixResetCommand extends Command {
     public constructor() {
-        super('prefix-reset', {
-            aliases: ['resetprefix'],
-            description: 'Resets the guild prefix.',
-            category: 'settings',
-            channel: 'guild',
-            ratelimit: 2,
-            clientPermissions: ['SEND_MESSAGES'],
-            userPermissions: ['MANAGE_GUILD']
-        });
+        super('prefix-reset', Constants.commands.prefixReset);
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {

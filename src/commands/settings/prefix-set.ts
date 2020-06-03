@@ -1,25 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 const prefixRegex = /^[?!@#$%^&*()_+-=[\]{}|;':",.<>/`~\w\d\s\u200D\u200B]{1,12}$/i;
 
 export default class PrefixSetCommand extends Command {
     public constructor() {
-        super('prefix-set', {
-            aliases: ['setprefix'],
-            description: 'Sets the guild prefix.',
-            category: 'settings',
-            channel: 'guild',
-            ratelimit: 2,
-            clientPermissions: ['SEND_MESSAGES'],
-            userPermissions: ['MANAGE_GUILD'],
-            args: [
-                {
-                    id: 'prefix',
-                    default: process.env.prefix || 'apu'
-                }
-            ]
-        });
+        super('prefix-set', Constants.commands.prefixSet);
     }
 
     public async exec(message: Message, { prefix }: { prefix: string }): Promise<Message | Message[]> {

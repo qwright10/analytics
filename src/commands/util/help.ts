@@ -1,21 +1,10 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, PermissionString } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class HelpCommand extends Command {
     public constructor() {
-        super('help', {
-            aliases: ['commands', 'help'],
-            description: 'Shows list of commands or command info.',
-            category: 'util',
-            editable: false,
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            args: [
-                {
-                    id: 'command',
-                    type: 'command'
-                }
-            ]
-        });
+        super('help', Constants.commands.help);
     }
 
     public async exec(message: Message, { command }: { command: Command | null }): Promise<Message | Message[]> {

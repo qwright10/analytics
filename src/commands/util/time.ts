@@ -1,20 +1,10 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class TimeCommand extends Command {
     public constructor() {
-        super('time', {
-            aliases: ['time'],
-            description: 'Times the execution of a command.',
-            category: 'util',
-            ownerOnly: true,
-            args: [
-                {
-                    id: 'rest',
-                    match: 'restContent'
-                }
-            ]
-        });
+        super('time', Constants.commands.time);
     }
 
     public async exec(message: Message, { rest }: { rest: string }): Promise<Message | Message[]> {
