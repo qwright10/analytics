@@ -69,9 +69,8 @@ export class AnalyticsClient extends AkairoClient {
             messageCacheLifetime: Infinity,
             partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
             fetchAllMembers: true,
-            ws: {
-                intents: Intents.ALL
-            }
+            presence: { status: 'dnd' },
+            ws: { intents: Intents.ALL }
         });
     }
 
