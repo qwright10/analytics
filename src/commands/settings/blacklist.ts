@@ -2,21 +2,21 @@ import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { Constants } from '../../structures/util/Constants';
 
-export default class PrefixCommand extends Command {
+export default class BlacklistCommand extends Command {
     public constructor() {
-        super('prefix', Constants.commands.prefix);
+        super('blacklist', Constants.commands.blacklist);
     }
 
     public *args() {
         const method = yield {
             type: [
-                ['prefix-get', 'get'],
-                ['prefix-set', 'set'],
-                ['prefix-reset', 'reset']
+                ['blacklist-get', 'get'],
+                ['blacklist-add', 'add'],
+                ['blacklist-remove', ['remove', 'rm']]
             ],
             otherwise: async (message: Message) => {
                 const prefix = await (this.handler.prefix as PrefixSupplier)(message);
-                message.util!.send(`\`${message.guild?.name ?? this.client.user!.username}\`'s prefix is \`${prefix}\``);
+                return message.util!.send(`Did you mean \`${prefix}blacklist get\`?`);
             }
         };
 

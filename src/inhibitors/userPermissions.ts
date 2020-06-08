@@ -1,13 +1,10 @@
 import { Inhibitor } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../structures/util/Constants';
 
 export default class UserPermissionsInhibitor extends Inhibitor {
     public constructor() {
-        super('user-permissions', {
-            reason: 'user permissions',
-            type: 'pre',
-            priority: 3
-        });
+        super('user-permissions', Constants.inhibitors.userPermissions);
     }
 
     public async exec(message: Message): Promise<boolean> {

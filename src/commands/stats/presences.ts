@@ -1,26 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, User } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 import { getRepository } from 'typeorm';
 import { PresenceCount, User as UEntity } from '../../structures/db/';
 
 export default class PresencesCommand extends Command {
     public constructor() {
-        super('presences', {
-            aliases: ['presence', 'presences'],
-            description: 'Provides statistics about presences.',
-            category: 'stats',
-            channel: 'guild',
-            cooldown: 5000,
-            ratelimit: 1,
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            args: [
-                {
-                    id: 'user',
-                    type: 'user',
-                    default: (message: Message) => message.author
-                }
-            ]
-        });
+        super('presences', Constants.commands.presences);
     }
 
     public async exec(message: Message, { user }: { user: User }): Promise<Message | Message[]> {

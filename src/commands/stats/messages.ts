@@ -1,39 +1,13 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 import { getRepository } from 'typeorm';
 import { Message as MEntity } from '../../structures/db/';
 import sha1 from 'sha1';
 
 export default class MessagesCommand extends Command {
     public constructor() {
-        super('messages', {
-            aliases: ['message', 'messages'],
-            description: 'Provides statistics about messages',
-            category: 'stats',
-            channel: 'guild',
-            cooldown: 5000,
-            ratelimit: 1,
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            args: [
-                {
-                    id: 'channel',
-                    type: 'textChannel',
-                    default: (message: Message) => message.channel,
-                    unordered: true
-                },
-                {
-                    id: 'user',
-                    type: 'user',
-                    default: (message: Message) => message.author,
-                    unordered: true
-                },
-                {
-                    id: 'content',
-                    match: 'option',
-                    flag: 'content='
-                }
-            ]
-        });
+        super('messages', Constants.commands.messages);
     }
 
     public async exec(message: Message, { content, channel, user }: { content: string | null, channel: TextChannel, user: User }): Promise<Message | Message[] | void> {

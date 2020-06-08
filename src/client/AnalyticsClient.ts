@@ -34,7 +34,7 @@ interface AnalyticsConfig {
 export class AnalyticsClient extends AkairoClient {
     public readonly commandHandler: CommandHandler = new CommandHandler(this, {
         directory: path.join(__dirname, '..', 'commands'),
-        prefix: async (message: Message): Promise<string> => await this.settings.get(message.guild ?? '0', 'prefix', process.env.prefix),
+        prefix: async (message: Message) => await this.settings.get<string>(message.guild ?? '0', 'prefix', process.env.prefix ?? 'apu'),
         allowMention: true,
         handleEdits: true,
         commandUtil: true,
@@ -69,9 +69,8 @@ export class AnalyticsClient extends AkairoClient {
             messageCacheLifetime: Infinity,
             partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
             fetchAllMembers: true,
-            ws: {
-                intents: Intents.ALL
-            }
+            presence: { status: 'dnd' },
+            ws: { intents: Intents.ALL }
         });
     }
 

@@ -1,14 +1,10 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class RestartCommand extends Command {
     public constructor() {
-        super('restart', {
-            aliases: ['restart', 'shutdown'],
-            description: 'Restarts the bot.',
-            category: 'util',
-            ownerOnly: true
-        });
+        super('restart', Constants.commands.restart);
     }
 
     public async exec(message: Message): Promise<any> {

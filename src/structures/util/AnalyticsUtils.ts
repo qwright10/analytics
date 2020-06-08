@@ -4,6 +4,14 @@ import fetch from 'node-fetch';
 
 export class AnalyticsUtils {
     public constructor(public readonly client: AkairoClient) {}
+
+    public async fetchAndReduce(toFetch: string): Promise<any> {
+        const result = await this.client.shard!.fetchClientValues(toFetch);
+        if (!result[0]) throw new Error('Nothing was returned');
+
+        if (typeof result[0] === 'number') return result.reduce((a, b) => a + b, 0);
+        if (result[0] instanceof Array) return result.flat(Infinity);
+    }
     
     public async paginate<T = { [key: string]: any }>(message: Message, data: T[], fn: (item: T, index: number) => MessageEmbed): Promise<void> {
         if (!data.length) return Promise.reject();

@@ -1,5 +1,7 @@
 import Akairo, { Command } from 'discord-akairo';
-import Discord, { Message, MessageEmbed, WebSocketShard } from 'discord.js';
+import Discord, { Message, MessageEmbed } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
+
 import os from 'os';
 import moment from 'moment';
 import 'moment-duration-format';
@@ -8,13 +10,7 @@ import { execSync } from 'child_process';
 
 export default class StatsCommand extends Command {
     public constructor() {
-        super('stats', {
-            aliases: ['about', 'info', 'stats'],
-            description: 'Gets info about this bot.',
-            category: 'info',
-            cooldown: 5000,
-            ratelimit: 1
-        });
+        super('stats', Constants.commands.stats);
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {
@@ -30,22 +26,16 @@ export default class StatsCommand extends Command {
         const akairo = `Akairo: v${Akairo.version}`;
         const commit = execSync(`cd '${__dirname}'; git rev-parse HEAD`, { shell: 'powershell', windowsHide: true }).toString();
 
-        const guilds = await this.client.shard!.fetchClientValues('guilds.cache.size')
-            .then(r => 
-                r.reduce((a, b) => a + b, 0)
-            );
-        const channels = await this.client.shard!.fetchClientValues('channels.cache.size')
-            .then(r => 
-                r.reduce((a, b) => a + b, 0)
-            );
+        const guilds = await this.client.utils.fetchAndReduce('guilds.cache.size');
+        const channels = await this.client.utils.fetchAndReduce('channels.cache.size');
         const members = await this.client.shard!.broadcastEval('this.guilds.cache.reduce((a, b) => a + b.memberCount, 0)')
             .then(r => 
                 r.reduce((a, b) => a + b, 0)
             );
-        const shardStatus = await this.client.shard!.fetchClientValues('ws.shards')
+        const shardStatus = await this.client.shard!.broadcastEval('this.ws.shards.map(s => s.status)')
             .then(r => 
                 r.reduce((a, b) =>
-                    a + b.map((c: WebSocketShard) => ShardStatus[c.status])
+                    a + b.map((c: number) => ShardStatus[c])
                 , '')
             );
 

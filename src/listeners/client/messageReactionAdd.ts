@@ -1,13 +1,10 @@
 import { Listener } from 'discord-akairo';
 import { MessageReaction, User } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 
 export default class MessageReactionAddListener extends Listener {
     public constructor() {
-        super('messageReactionAdd', {
-            event: 'messageReactionAdd',
-            emitter: 'client',
-            category: 'client'
-        });
+        super('messageReactionAdd', Constants.listeners.messageReactionAdd);
     }
 
     public async exec(reaction: MessageReaction, user: User): Promise<any> {

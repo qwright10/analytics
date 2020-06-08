@@ -1,38 +1,13 @@
-import { Command, Argument } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { Constants } from '../../structures/util/Constants';
 import util from 'util';
 
 export default class EvalCommand extends Command {
     public hrStart?: [number, number];
     
     public constructor() {
-        super('eval', {
-            aliases: ['eval'],
-            description: 'Evaluates JavaScript',
-            category: 'util',
-            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
-            ownerOnly: true,
-            args: [
-                {
-                    id: 'awaitRes',
-                    match: 'flag',
-                    flag: 'await'
-                },
-                {
-                    id: 'code',
-                    match: 'rest',
-                    type: Argument.compose((_, phrase: string) => {
-                        while (phrase.charAt(0) === '`') phrase = phrase.substring(1);
-                        while (phrase.charAt(phrase.length - 1) === '`') phrase = phrase.substring(0, phrase.length - 1);
-                        if (phrase.startsWith('js')) phrase = phrase.substring(2, phrase.length - 1);
-                        return phrase;
-                    }),
-                    prompt: {
-                        start: (message: Message): string => `${message.author}, what would you like the evaluate?`
-                    }
-                }
-            ]
-        });
+        super('eval', Constants.commands.eval);
     }
 
     public async exec(message: Message, { awaitRes, code }: { awaitRes: boolean; code: string }): Promise<Message | Message[]> {
