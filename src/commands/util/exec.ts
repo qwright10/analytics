@@ -10,7 +10,7 @@ export default class ExecCommand extends Command {
 
     public async exec(message: Message, { code }: { code: string }): Promise<any> {
         let hrTime: [number, number] = process.hrtime();
-        return exec(code, { windowsHide: true }, async (err, stdout): Promise<Message | Message[]> => {
+        return exec(code, { windowsHide: true, shell: 'powershell' }, async (err, stdout): Promise<Message | Message[]> => {
             hrTime = process.hrtime(hrTime);
             let result = (err ?? stdout) as string;
             if (result.length > 1000) {
