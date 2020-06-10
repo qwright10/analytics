@@ -310,7 +310,14 @@ export const Constants = {
                 value: 'Restarts all shards'
             },
             category: 'util',
-            ownerOnly: true
+            ownerOnly: true,
+            args: [
+                {
+                    id: 'force',
+                    match: 'flag',
+                    flag: ['-y', '--yes', '-f', '--force']
+                }
+            ]
         },
 
         stats: {
