@@ -3,9 +3,9 @@ import { Logger } from './structures/util/Logger';
 require('dotenv').config({ path: `${__dirname}/../.env` });
 
 const options: any = {
-    totalShards: parseInt(process.env.shards ?? '0') || 'auto',
+    totalShards: 2,
     respawn: true,
-    mode: process.env.shardtype as 'process' | 'worker',
+    mode: 'worker',
     execArgv: ['--inspect', '--experimental-worker']
 };
 
