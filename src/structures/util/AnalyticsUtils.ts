@@ -39,6 +39,11 @@ export class AnalyticsUtils {
         collector.on('remove', (r) => update(r));
     }
 
+    public pgify(date: Date | number = new Date()): string {
+        if (typeof date === 'number') date = new Date(date);
+        return date.toISOString().replace('T', ' ').replace('Z', '');
+    }
+
     public async prompt(prompt: string, message: Message, filter?: (message: Message) => boolean): Promise<boolean | null> {
         const m = await message.channel.send(prompt);
         const res = await m.channel.awaitMessages(filter ?? ((msg: Message) => msg.author.id === message.author.id), { time: 30000, max: 1 });
