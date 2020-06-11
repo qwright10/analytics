@@ -471,7 +471,8 @@ denque@^1.4.1:
 
 discord-akairo@discord-akairo/discord-akairo:
   version "8.0.0"
-  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/678ae775c89947fcf77c566e04f9035941c42e0e"
+  uid fd125b19fe6afd0fac30a94c20a94a9e79cc23da
+  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/fd125b19fe6afd0fac30a94c20a94a9e79cc23da"
 
 discord.js@discordjs/discord.js:
   version "12.2.0"
