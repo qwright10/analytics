@@ -28,5 +28,5 @@ export class User {
     leaves!: { at: number; id: string }[];
 
     @Column({ name: 'edits', type: 'json' })
-    edits!: { [type: string]: { at: number; from: any; to: any }[]};
+    edits!: { [type: string]: { at: number; from: any; to: any }[] };
 }

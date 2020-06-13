@@ -23,4 +23,17 @@ import { Role } from './Role';
 import { SettingsEntity } from './Settings';
 import { Stats } from './Stats';
 import { User } from './User';
-export default [Channel, Emoji, Event, Guild, Message, Presence, PresenceCount, Raw, Role, SettingsEntity, Stats, User];
+export default [
+    Channel,
+    Emoji,
+    Event,
+    Guild,
+    Message,
+    Presence,
+    PresenceCount,
+    Raw,
+    Role,
+    SettingsEntity,
+    Stats,
+    User,
+];

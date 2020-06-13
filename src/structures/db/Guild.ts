@@ -10,7 +10,7 @@ export class Guild {
     id!: string;
 
     @Column({ name: 'owner', type: 'text' })
-    owner!: string
+    owner!: string;
 
     @Column({ name: 'name', type: 'text' })
     name!: string;
@@ -32,7 +32,7 @@ export class Guild {
 
     @Column({ name: 'bans', type: 'json' })
     bans!: string[];
-    
+
     @Column({ name: 'edits', type: 'json' })
-    edits!: { [type: string]: { at: number; from: any; to: any }[]};
+    edits!: { [type: string]: { at: number; from: any; to: any }[] };
 }

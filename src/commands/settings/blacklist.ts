@@ -12,12 +12,16 @@ export default class BlacklistCommand extends Command {
             type: [
                 ['blacklist-get', 'get'],
                 ['blacklist-add', 'add'],
-                ['blacklist-remove', ['remove', 'rm']]
+                ['blacklist-remove', ['remove', 'rm']],
             ],
             otherwise: async (message: Message) => {
-                const prefix = await (this.handler.prefix as PrefixSupplier)(message);
-                return message.util!.send(`Did you mean \`${prefix}blacklist get\`?`);
-            }
+                const prefix = await (this.handler.prefix as PrefixSupplier)(
+                    message
+                );
+                return message.util!.send(
+                    `Did you mean \`${prefix}blacklist get\`?`
+                );
+            },
         };
 
         return Flag.continue(method);

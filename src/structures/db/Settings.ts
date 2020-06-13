@@ -9,7 +9,7 @@ export interface Settings {
 export const defaults: Settings = {
     blacklist: [],
     hasConfirmed: true,
-    prefix: process.env.prefix || 'apu'
+    prefix: process.env.prefix || 'apu',
 };
 
 @Entity()

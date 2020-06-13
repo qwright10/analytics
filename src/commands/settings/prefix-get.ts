@@ -9,6 +9,10 @@ export default class PrefixResetCommand extends Command {
 
     public async exec(message: Message): Promise<Message | Message[]> {
         const prefix = await (this.handler.prefix as PrefixSupplier)(message);
-        return message.util!.send(`\`${message.guild?.name ?? this.client.user!.username}\`'s prefix is \`${prefix}\``);
+        return message.util!.send(
+            `\`${
+                message.guild?.name ?? this.client.user!.username
+            }\`'s prefix is \`${prefix}\``
+        );
     }
 }

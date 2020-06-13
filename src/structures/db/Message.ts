@@ -37,5 +37,5 @@ export class Message {
     reactions!: { at: number; id: string; user: string }[];
 
     @Column({ name: 'edits', type: 'json' })
-    edits!: { [type: string]: { at: number; from: any; to: any }[]};
+    edits!: { [type: string]: { at: number; from: any; to: any }[] };
 }

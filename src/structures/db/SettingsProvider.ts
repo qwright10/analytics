@@ -9,7 +9,7 @@ export class SettingsProvider {
     public readonly defaults = defaults;
     public repository!: Repository<SettingsEntity>;
 
-    public constructor(public readonly client: AnalyticsClient) { }
+    public constructor(public readonly client: AnalyticsClient) {}
 
     public async init(): Promise<this> {
         this.repository = getRepository(SettingsEntity);
@@ -18,22 +18,45 @@ export class SettingsProvider {
         return this;
     }
 
-    public async get<T = any>(guild: GuildIDResolvable, query: string): Promise<T | undefined>;
-    public async get<T = any>(guild: GuildIDResolvable, query: string[]): Promise<T[] | undefined>;
-    public async get<T = any>(guild: GuildIDResolvable, query: string, defaultValue: T): Promise<T>;
-    public async get<T = any>(guild: GuildIDResolvable, queries: string[], defaultValue: T): Promise<T[]>;
-    public async get<T = any>(guild: GuildIDResolvable, query: string | string[], defaultValue?: T): Promise<any> {
+    public async get<T = any>(
+        guild: GuildIDResolvable,
+        query: string
+    ): Promise<T | undefined>;
+    public async get<T = any>(
+        guild: GuildIDResolvable,
+        query: string[]
+    ): Promise<T[] | undefined>;
+    public async get<T = any>(
+        guild: GuildIDResolvable,
+        query: string,
+        defaultValue: T
+    ): Promise<T>;
+    public async get<T = any>(
+        guild: GuildIDResolvable,
+        queries: string[],
+        defaultValue: T
+    ): Promise<T[]>;
+    public async get<T = any>(
+        guild: GuildIDResolvable,
+        query: string | string[],
+        defaultValue?: T
+    ): Promise<any> {
         const id = this.getGuildID(guild);
         if (!this.cache.has(id)) await this.cacheOne(id);
 
         const item = this.cache.get(id)!;
         let items: string | string[] = query;
-        if (items instanceof Array) items = items.map(i => _.get(item, i, defaultValue));
+        if (items instanceof Array)
+            items = items.map((i) => _.get(item, i, defaultValue));
         else items = _.get(item, query);
         return items ?? defaultValue;
     }
 
-    public async set(guild: Guild | string, query: string, value: any): Promise<Settings> {
+    public async set(
+        guild: Guild | string,
+        query: string,
+        value: any
+    ): Promise<Settings> {
         const id = this.getGuildID(guild);
         if (!this.cache.has(id)) await this.cacheOne(id);
 
@@ -53,7 +76,10 @@ export class SettingsProvider {
 
     public async reset(guild: Guild | string): Promise<Settings>;
     public async reset(guild: Guild | string, query: string): Promise<Settings>;
-    public async reset(guild: Guild | string, query?: string): Promise<Settings> {
+    public async reset(
+        guild: Guild | string,
+        query?: string
+    ): Promise<Settings> {
         const id = this.getGuildID(guild);
         if (!this.cache.has(id)) await this.cacheOne(id);
 
@@ -76,7 +102,10 @@ export class SettingsProvider {
 
     public async cacheOne(id: string): Promise<Settings> {
         const item = await this.repository.findOne(id);
-        if (!item) return Promise.reject(`[SettingsProvider cacheOne] Guild ${id} settings entry not found`);
+        if (!item)
+            return Promise.reject(
+                `[SettingsProvider cacheOne] Guild ${id} settings entry not found`
+            );
         this.cache.set(item.id, item.data);
         return item.data;
     }
@@ -87,13 +116,18 @@ export class SettingsProvider {
         return data;
     }
 
-    public update(data: [string, Settings][] | { [id: string]: Settings } | Map<string, Settings>): void {
+    public update(
+        data:
+            | [string, Settings][]
+            | { [id: string]: Settings }
+            | Map<string, Settings>
+    ): void {
         if (data instanceof Map) {
             return data.forEach((v, k) => {
                 this.cache.set(k, v);
             });
         } else if (data instanceof Array) {
-            return data.forEach(d => {
+            return data.forEach((d) => {
                 this.cache.set(d[0], d[1]);
             });
         } else if (data instanceof Object) {
@@ -105,7 +139,9 @@ export class SettingsProvider {
         if (guild instanceof Guild) return guild.id;
         if (typeof guild === 'string') return guild;
         if (guild === null) return '0';
-        throw new TypeError('Guild parameter must be a guild instance, a guild ID, 0, or \'global\'');
+        throw new TypeError(
+            "Guild parameter must be a guild instance, a guild ID, 0, or 'global'"
+        );
     }
 }
 

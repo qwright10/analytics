@@ -9,7 +9,10 @@ export default class PrefixSetCommand extends Command {
         super('prefix-set', Constants.commands.prefixSet);
     }
 
-    public async exec(message: Message, { prefix }: { prefix: string }): Promise<Message | Message[]> {
+    public async exec(
+        message: Message,
+        { prefix }: { prefix: string }
+    ): Promise<Message | Message[]> {
         if (!prefixRegex.test(prefix)) {
             const msg = 'Prefixes can only be 1 to 12 characters.';
             return message.util!.send(msg);

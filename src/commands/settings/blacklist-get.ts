@@ -9,23 +9,43 @@ export default class PrefixGetCommand extends Command {
     }
 
     public async exec(message: Message): Promise<Message | Message[]> {
-        const guildBlacklist = await this.client.settings.get<string[]>(message.guild, 'blacklist');
-        const globalBlacklist = await this.client.settings.get<string[]>('0', 'blacklist');
+        const guildBlacklist = await this.client.settings.get<string[]>(
+            message.guild,
+            'blacklist'
+        );
+        const globalBlacklist = await this.client.settings.get<string[]>(
+            '0',
+            'blacklist'
+        );
 
         if (message.guild) {
-            if (guildBlacklist === undefined) return message.util!.send('Something went wrong while fetching the blacklist.');
-            if (!guildBlacklist.length) return message.util!.send('Nobody is blacklisted');
+            if (guildBlacklist === undefined)
+                return message.util!.send(
+                    'Something went wrong while fetching the blacklist.'
+                );
+            if (!guildBlacklist.length)
+                return message.util!.send('Nobody is blacklisted');
             const msg = stripIndents`
                 The guild blacklist is:
-                ${guildBlacklist.map(id => `\`${id}\``).join(' ').slice(0, 1000)}`;
+                ${guildBlacklist
+                    .map((id) => `\`${id}\``)
+                    .join(' ')
+                    .slice(0, 1000)}`;
             return message.util!.send(msg);
         } else {
-            if (globalBlacklist === undefined) return message.util!.send('Something went wrong while fetching the blacklist.');
-            if (!globalBlacklist.length) return message.util!.send('Nobody is blacklisted');
+            if (globalBlacklist === undefined)
+                return message.util!.send(
+                    'Something went wrong while fetching the blacklist.'
+                );
+            if (!globalBlacklist.length)
+                return message.util!.send('Nobody is blacklisted');
 
             const msg = stripIndents`
                 The global blacklist is:
-                ${globalBlacklist.map(id => `\`${id}\``).join(' ').slice(0, 1000)}`;
+                ${globalBlacklist
+                    .map((id) => `\`${id}\``)
+                    .join(' ')
+                    .slice(0, 1000)}`;
             return message.util!.send(msg);
         }
     }

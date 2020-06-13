@@ -9,19 +9,22 @@ export default class PresencesCommand extends Command {
         super('presences', Constants.commands.presences);
     }
 
-    public async exec(message: Message, { user }: { user: User }): Promise<Message | Message[]> {
+    public async exec(
+        message: Message,
+        { user }: { user: User }
+    ): Promise<Message | Message[]> {
         const totalPresences = await getRepository(PresenceCount)
             .createQueryBuilder()
             .select('c')
             .take(1)
             .execute()
-            .then(r => parseInt(r[0]?.c)?.toLocaleString());
+            .then((r) => parseInt(r[0]?.c)?.toLocaleString());
         const userPresences = await getRepository(UEntity)
             .createQueryBuilder()
             .select('presences')
             .where('id = :id', { id: user.id })
             .execute()
-            .then(r => r[0]?.presences?.toLocaleString());
+            .then((r) => r[0]?.presences?.toLocaleString());
         const embed = new MessageEmbed()
             .setTitle(`Stats for ${user.username}`)
             .addField('Total Presence Updates', totalPresences ?? 'Unknown')

@@ -9,11 +9,14 @@ export default class GuildCreateListener extends Listener {
     }
 
     public async exec(guild: Guild): Promise<void> {
-        if (!this.client.settings.cache.has(guild.id)) this.client.settings.create(guild);
+        if (!this.client.settings.cache.has(guild.id))
+            this.client.settings.create(guild);
         this.client.logger.info(`Joined guild: ${guild.name}`);
 
         const guildOwner = await this.client.users.fetch(guild.ownerID);
-        const botOwner = await this.client.users.fetch(this.client.ownerID as string);
+        const botOwner = await this.client.users.fetch(
+            this.client.ownerID as string
+        );
         const msg = stripIndents`
             This bot collected **a lot** of data, including:
             messages, member/user objects, presence updates,

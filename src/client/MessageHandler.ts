@@ -1,6 +1,16 @@
 import { AnalyticsClient } from './AnalyticsClient';
 import { getRepository } from 'typeorm';
-import { Channel, Emoji, Event, Guild, Message, Presence, Raw, Role, User } from '../structures/db';
+import {
+    Channel,
+    Emoji,
+    Event,
+    Guild,
+    Message,
+    Presence,
+    Raw,
+    Role,
+    User,
+} from '../structures/db';
 import Discord from 'discord.js';
 import sha1 from 'sha1';
 
@@ -14,7 +24,10 @@ export class MessageHandler {
 
     public constructor(client: AnalyticsClient) {
         this.client = client;
-        this.intervals.set(presenceSymbol, setInterval(this.writePresences.bind(this), 10000));
+        this.intervals.set(
+            presenceSymbol,
+            setInterval(this.writePresences.bind(this), 10000)
+        );
     }
 
     public async writePresences(): Promise<void> {
@@ -43,9 +56,18 @@ export class MessageHandler {
         this.client.on('message', this._message.bind(this));
         this.client.on('messageDelete', this._messageDelete.bind(this));
         this.client.on('messageDeleteBulk', this._messageDeleteBulk.bind(this));
-        this.client.on('messageReactionAdd', this._messageReactionAdd.bind(this));
-        this.client.on('messageReactionRemove', this._messageReactionRemove.bind(this));
-        this.client.on('messageReactionRemoveAll', this._messageReactionRemoveAll.bind(this));
+        this.client.on(
+            'messageReactionAdd',
+            this._messageReactionAdd.bind(this)
+        );
+        this.client.on(
+            'messageReactionRemove',
+            this._messageReactionRemove.bind(this)
+        );
+        this.client.on(
+            'messageReactionRemoveAll',
+            this._messageReactionRemoveAll.bind(this)
+        );
         this.client.on('messageUpdate', this._messageUpdate.bind(this));
         // Other
         this.client.on('presenceUpdate', this._presenceUpdate.bind(this));
@@ -69,13 +91,28 @@ export class MessageHandler {
         this.client.off('guildDelete', this._guildDelete.bind(this));
         this.client.off('guildUpdate', this._guildUpdate.bind(this));
         this.client.off('guildMemberAdd', this._guildMemberAdd.bind(this));
-        this.client.off('guildMemberRemove', this._guildMemberRemove.bind(this));
+        this.client.off(
+            'guildMemberRemove',
+            this._guildMemberRemove.bind(this)
+        );
         this.client.off('message', this._message.bind(this));
         this.client.off('messageDelete', this._messageDelete.bind(this));
-        this.client.off('messageDeleteBulk', this._messageDeleteBulk.bind(this));
-        this.client.off('messageReactionAdd', this._messageReactionAdd.bind(this));
-        this.client.off('messageReactionRemove', this._messageReactionRemove.bind(this));
-        this.client.off('messageReactionRemoveAll', this._messageReactionRemoveAll.bind(this));
+        this.client.off(
+            'messageDeleteBulk',
+            this._messageDeleteBulk.bind(this)
+        );
+        this.client.off(
+            'messageReactionAdd',
+            this._messageReactionAdd.bind(this)
+        );
+        this.client.off(
+            'messageReactionRemove',
+            this._messageReactionRemove.bind(this)
+        );
+        this.client.off(
+            'messageReactionRemoveAll',
+            this._messageReactionRemoveAll.bind(this)
+        );
         this.client.off('messageUpdate', this._messageUpdate.bind(this));
         this.client.off('presenceUpdate', this._presenceUpdate.bind(this));
         this.client.off('roleCreate', this._roleCreate.bind(this));
@@ -88,20 +125,29 @@ export class MessageHandler {
     private _channelCreate(channel: any): void {
         const data = {
             id: channel.id,
-            name: channel instanceof Discord.DMChannel ? channel.recipient.tag : channel.name,
-            guild: channel instanceof Discord.DMChannel ? null : channel.guild.id,
+            name:
+                channel instanceof Discord.DMChannel
+                    ? channel.recipient.tag
+                    : channel.name,
+            guild:
+                channel instanceof Discord.DMChannel ? null : channel.guild.id,
             deleted: false,
             createdAt: dateToPG(channel.createdAt),
             type: channel.type,
-            parent: channel instanceof Discord.DMChannel ? null : channel.parentID!,
-            permissionOverwrites: channel instanceof Discord.DMChannel ? null : channel.permissionOverwrites!.toJSON(),
-            topic: channel instanceof Discord.TextChannel ? channel.topic : null,
+            parent:
+                channel instanceof Discord.DMChannel ? null : channel.parentID!,
+            permissionOverwrites:
+                channel instanceof Discord.DMChannel
+                    ? null
+                    : channel.permissionOverwrites!.toJSON(),
+            topic:
+                channel instanceof Discord.TextChannel ? channel.topic : null,
             edits: {
                 name: [],
                 parent: [],
                 permissionOverwrites: [],
-                topic: []
-            }
+                topic: [],
+            },
         };
 
         getRepository(Channel).save(data);
@@ -111,7 +157,10 @@ export class MessageHandler {
         getRepository(Channel).update(channel.id, { deleted: true });
     }
 
-    private async _channelUpdate(oldChannel: any, newChannel: any): Promise<void> {
+    private async _channelUpdate(
+        oldChannel: any,
+        newChannel: any
+    ): Promise<void> {
         const record = await getRepository(Channel).findOne(oldChannel.id);
         if (!record) return;
 
@@ -119,34 +168,56 @@ export class MessageHandler {
             record.edits.name,
             record.edits.parent,
             record.edits.permissionOverwrites,
-            record.edits.topic
+            record.edits.topic,
         ];
-        const channelName = oldChannel instanceof Discord.DMChannel ? oldChannel.recipient.tag : oldChannel.name;
+        const channelName =
+            oldChannel instanceof Discord.DMChannel
+                ? oldChannel.recipient.tag
+                : oldChannel.name;
         if (channelName !== record.name) {
             name.push({ at: Date.now(), from: record.name, to: channelName });
             record.name = channelName;
         }
-        if (oldChannel instanceof Discord.GuildChannel && oldChannel.parentID !== record.parent) {
-            parent.push({ at: Date.now(), from: record.parent!, to: (newChannel as Discord.GuildChannel).parentID! });
+        if (
+            oldChannel instanceof Discord.GuildChannel &&
+            oldChannel.parentID !== record.parent
+        ) {
+            parent.push({
+                at: Date.now(),
+                from: record.parent!,
+                to: (newChannel as Discord.GuildChannel).parentID!,
+            });
             record.parent = oldChannel.parentID;
         }
-        if (oldChannel instanceof Discord.GuildChannel && oldChannel.permissionOverwrites !== record.permissionOverwrites) {
+        if (
+            oldChannel instanceof Discord.GuildChannel &&
+            oldChannel.permissionOverwrites !== record.permissionOverwrites
+        ) {
             getRepository(Event).insert({
                 type: 'PERMISSION_OVERWRITES',
                 data: {
                     at: Date.now(),
                     from: record.permissionOverwrites,
-                    to: (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON()
-                }
+                    to: (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON(),
+                },
             } as any);
             record.permissionOverwrites = (newChannel as Discord.GuildChannel).permissionOverwrites.toJSON();
         }
-        if (oldChannel instanceof Discord.TextChannel && oldChannel.topic !== record.topic) {
-            topic.push({ at: Date.now(), from: record.topic, to: (newChannel as Discord.TextChannel).topic });
+        if (
+            oldChannel instanceof Discord.TextChannel &&
+            oldChannel.topic !== record.topic
+        ) {
+            topic.push({
+                at: Date.now(),
+                from: record.topic,
+                to: (newChannel as Discord.TextChannel).topic,
+            });
             record.topic = (newChannel as Discord.TextChannel).topic;
         }
 
-        getRepository(Channel).update(oldChannel.id, { edits: { name, parent, permissionOverwrites }});
+        getRepository(Channel).update(oldChannel.id, {
+            edits: { name, parent, permissionOverwrites },
+        });
     }
 
     private _emojiCreate(emoji: Discord.GuildEmoji): void {
@@ -157,8 +228,8 @@ export class MessageHandler {
             name: emoji.name,
             url: emoji.url,
             edits: {
-                name: []
-            }
+                name: [],
+            },
         };
 
         getRepository(Emoji).insert(data);
@@ -168,19 +239,29 @@ export class MessageHandler {
         getRepository(Emoji).update(emoji.id, { deleted: true });
     }
 
-    private async _emojiUpdate(oldEmoji: Discord.GuildEmoji, newEmoji: Discord.GuildEmoji): Promise<void> {
+    private async _emojiUpdate(
+        oldEmoji: Discord.GuildEmoji,
+        newEmoji: Discord.GuildEmoji
+    ): Promise<void> {
         const record = await getRepository(Emoji).findOne(oldEmoji.id);
         if (!record) return;
 
         if (record.name !== newEmoji.name) {
-            record.edits.name.push({ at: Date.now(), from: record.name, to: newEmoji.name });
+            record.edits.name.push({
+                at: Date.now(),
+                from: record.name,
+                to: newEmoji.name,
+            });
             record.name = newEmoji.name;
         }
 
         getRepository(Emoji).update(oldEmoji.id, record);
     }
 
-    private async _guildBanAdd(guild: Discord.Guild, user: Discord.User | Discord.PartialUser): Promise<void> {
+    private async _guildBanAdd(
+        guild: Discord.Guild,
+        user: Discord.User | Discord.PartialUser
+    ): Promise<void> {
         const record = await getRepository(Guild).findOne(guild.id);
         if (!record) return;
 
@@ -188,7 +269,10 @@ export class MessageHandler {
         getRepository(Guild).update(guild.id, record);
     }
 
-    private async _guildBanRemove(guild: Discord.Guild, user: Discord.User | Discord.PartialUser): Promise<void> {
+    private async _guildBanRemove(
+        guild: Discord.Guild,
+        user: Discord.User | Discord.PartialUser
+    ): Promise<void> {
         const record = await getRepository(Guild).findOne(guild.id);
         if (!record) return;
 
@@ -207,11 +291,14 @@ export class MessageHandler {
             deleted: false,
             joins: [],
             leaves: [],
-            bans: await guild.fetchBans().then(b => b.array().map(e => e.user.id)).catch(() => []),
+            bans: await guild
+                .fetchBans()
+                .then((b) => b.array().map((e) => e.user.id))
+                .catch(() => []),
             edits: {
                 description: [],
-                name: []
-            }
+                name: [],
+            },
         };
 
         getRepository(Guild).insert(data);
@@ -226,8 +313,10 @@ export class MessageHandler {
         getRepository(Guild).update(guild.id, { deleted: true });
     }
 
-    private async _guildMemberAdd(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<void> {
-        if (member.partial) await member.fetch(); 
+    private async _guildMemberAdd(
+        member: Discord.GuildMember | Discord.PartialGuildMember
+    ): Promise<void> {
+        if (member.partial) await member.fetch();
         let userRecord: any = await getRepository(User).findOne(member.id);
 
         if (!userRecord) {
@@ -240,10 +329,10 @@ export class MessageHandler {
                 leaves: [],
                 edits: {
                     tag: [],
-                    avatar: []
-                }
+                    avatar: [],
+                },
             };
-            
+
             await getRepository(User).insert(data);
             userRecord = data;
         }
@@ -253,8 +342,8 @@ export class MessageHandler {
             data: {
                 guild: member.guild.id,
                 at: member.joinedTimestamp ?? Date.now(),
-                id: member.id
-            }
+                id: member.id,
+            },
         };
 
         userRecord.guilds.push(member.guild.id);
@@ -262,7 +351,9 @@ export class MessageHandler {
         getRepository(User).update(member.id, userRecord);
     }
 
-    private async _guildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<void> {
+    private async _guildMemberRemove(
+        member: Discord.GuildMember | Discord.PartialGuildMember
+    ): Promise<void> {
         const record = await getRepository(User).findOne(member.id);
         if (!record) return;
 
@@ -271,27 +362,38 @@ export class MessageHandler {
             data: {
                 guild: member.guild.id,
                 at: Date.now(),
-                id: member.id
-            }
+                id: member.id,
+            },
         };
 
         record.guilds.splice(record.guilds.indexOf(member.guild.id), 1);
         record.leaves.push({ at: Date.now(), id: member.id });
-        
+
         getRepository(Event).insert(data as any);
         getRepository(User).update(member.id, record);
     }
 
-    private async _guildUpdate(oldGuild: Discord.Guild, newGuild: Discord.Guild): Promise<void> {
+    private async _guildUpdate(
+        oldGuild: Discord.Guild,
+        newGuild: Discord.Guild
+    ): Promise<void> {
         const record = await getRepository(Guild).findOne(oldGuild.id);
         if (!record) return;
 
         if (record.description !== newGuild.description) {
-            record.edits.description.push({ at: Date.now(), from: record.description, to: newGuild.description });
+            record.edits.description.push({
+                at: Date.now(),
+                from: record.description,
+                to: newGuild.description,
+            });
             record.description = newGuild.description;
         }
         if (record.name !== newGuild.name) {
-            record.edits.name.push({ at: Date.now(), from: record.name, to: newGuild.name });
+            record.edits.name.push({
+                at: Date.now(),
+                from: record.name,
+                to: newGuild.name,
+            });
             record.name = newGuild.name;
         }
 
@@ -307,49 +409,80 @@ export class MessageHandler {
             content: sha1(message.content),
             rawContent: message.content,
             deleted: false,
-            createdAt: message.createdAt.toISOString().replace('T', ' ').replace('Z', ''),
-            embeds: message.embeds.map(e => e.toJSON()),
+            createdAt: message.createdAt
+                .toISOString()
+                .replace('T', ' ')
+                .replace('Z', ''),
+            embeds: message.embeds.map((e) => e.toJSON()),
             reactions: [],
             edits: {
                 content: [],
-                embeds: []
-            }
+                embeds: [],
+            },
         };
 
         getRepository(Message).insert(data);
     }
 
-    private _messageDelete(message: Discord.Message | Discord.PartialMessage): void {
+    private _messageDelete(
+        message: Discord.Message | Discord.PartialMessage
+    ): void {
         getRepository(Message).update(message.id, { deleted: true });
     }
 
-    private _messageDeleteBulk(messages: Discord.Collection<string, Discord.Message | Discord.PartialMessage>): void {
+    private _messageDeleteBulk(
+        messages: Discord.Collection<
+            string,
+            Discord.Message | Discord.PartialMessage
+        >
+    ): void {
         for (const [id] of messages) {
             getRepository(Message).update(id, { deleted: true });
         }
     }
 
-    private async _messageReactionAdd(reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser): Promise<void> {
-        const record = await getRepository(Message).findOne(reaction.message.id);
+    private async _messageReactionAdd(
+        reaction: Discord.MessageReaction,
+        user: Discord.User | Discord.PartialUser
+    ): Promise<void> {
+        const record = await getRepository(Message).findOne(
+            reaction.message.id
+        );
         if (!record) return;
 
-        record.reactions.push({ at: Date.now(), id: reaction.emoji.identifier, user: user.id });
+        record.reactions.push({
+            at: Date.now(),
+            id: reaction.emoji.identifier,
+            user: user.id,
+        });
         getRepository(Message).update(reaction.message.id, record);
     }
 
-    private async _messageReactionRemove(reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser): Promise<void> {
-        const record = await getRepository(Message).findOne(reaction.message.id);
+    private async _messageReactionRemove(
+        reaction: Discord.MessageReaction,
+        user: Discord.User | Discord.PartialUser
+    ): Promise<void> {
+        const record = await getRepository(Message).findOne(
+            reaction.message.id
+        );
         if (!record) return;
 
-        record.reactions = record.reactions.filter(v => v.id !== reaction.emoji.identifier && v.user !== user.id);
+        record.reactions = record.reactions.filter(
+            (v) => v.id !== reaction.emoji.identifier && v.user !== user.id
+        );
         getRepository(Message).update(reaction.message.id, record);
     }
 
-    private _messageReactionRemoveAll(message: Discord.Message | Discord.PartialMessage): void {
+    private _messageReactionRemoveAll(
+        message: Discord.Message | Discord.PartialMessage
+    ): void {
         getRepository(Message).update(message.id, { reactions: [] });
     }
 
-    private async _messageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage): Promise<void> {
+    private async _messageUpdate(
+        oldMessage: Discord.Message | Discord.PartialMessage,
+        newMessage: Discord.Message | Discord.PartialMessage
+    ): Promise<void> {
         if (newMessage.partial) await newMessage.fetch();
         const record = await getRepository(Message).findOne(oldMessage.id);
         if (!record) return;
@@ -357,39 +490,56 @@ export class MessageHandler {
         const hash = sha1(newMessage.content!);
 
         if (record.content !== hash) {
-            record.edits.content.push({ at: Date.now(), from: record.content, to: sha1(newMessage.content!) });
+            record.edits.content.push({
+                at: Date.now(),
+                from: record.content,
+                to: sha1(newMessage.content!),
+            });
             record.content = hash;
         }
-        if (record.embeds !== newMessage.embeds!.map(e => e.toJSON())) {
-            record.edits.embeds.push({ at: Date.now(), from: record.embeds, to: newMessage.embeds!.map(e => e.toJSON()) });
-            record.embeds = newMessage.embeds!.map(e => e.toJSON());
+        if (record.embeds !== newMessage.embeds!.map((e) => e.toJSON())) {
+            record.edits.embeds.push({
+                at: Date.now(),
+                from: record.embeds,
+                to: newMessage.embeds!.map((e) => e.toJSON()),
+            });
+            record.embeds = newMessage.embeds!.map((e) => e.toJSON());
         }
 
         getRepository(Message).update(oldMessage.id, record);
     }
 
-    private async _presenceUpdate(_: Discord.Presence | undefined, newPresence: Discord.Presence): Promise<void> {
+    private async _presenceUpdate(
+        _: Discord.Presence | undefined,
+        newPresence: Discord.Presence
+    ): Promise<void> {
         if (newPresence.user?.bot || !newPresence.userID) return;
 
         const data = {
             id: newPresence.userID,
             at: dateToPG(new Date()),
-            presence: newPresence ? {
-                activities: newPresence.activities,
-                clientStatus: newPresence.clientStatus,
-                guild: newPresence.guild?.id ?? null,
-                status: newPresence.status
-            } : null
+            presence: newPresence
+                ? {
+                      activities: newPresence.activities,
+                      clientStatus: newPresence.clientStatus,
+                      guild: newPresence.guild?.id ?? null,
+                      status: newPresence.status,
+                  }
+                : null,
         };
 
         getRepository(Presence).insert(data);
-        getRepository(User).increment({ id: newPresence.userID }, 'presences', 1);
+        getRepository(User).increment(
+            { id: newPresence.userID },
+            'presences',
+            1
+        );
     }
 
     private async _raw(message: any): Promise<any> {
         const data = {
             op: message.op,
-            t: message.t
+            t: message.t,
         };
 
         getRepository(Raw).increment(data, 'count', 1);
@@ -407,8 +557,8 @@ export class MessageHandler {
             edits: {
                 name: [],
                 color: [],
-                permissions: []
-            }
+                permissions: [],
+            },
         };
 
         getRepository(Role).insert(data);
@@ -418,37 +568,63 @@ export class MessageHandler {
         getRepository(Role).update(role.id, { deleted: true });
     }
 
-    private async _roleUpdate(oldRole: Discord.Role, newRole: Discord.Role): Promise<void> {
+    private async _roleUpdate(
+        oldRole: Discord.Role,
+        newRole: Discord.Role
+    ): Promise<void> {
         const record = await getRepository(Role).findOne(oldRole.id);
         if (!record) return;
 
         if (record.name !== newRole.name) {
-            record.edits.name.push({ at: Date.now(), from: record.name, to: newRole.name });
+            record.edits.name.push({
+                at: Date.now(),
+                from: record.name,
+                to: newRole.name,
+            });
             record.name = newRole.name;
         }
         if (record.color !== newRole.color) {
-            record.edits.color.push({ at: Date.now(), from: record.color, to: newRole.color });
+            record.edits.color.push({
+                at: Date.now(),
+                from: record.color,
+                to: newRole.color,
+            });
             record.color = newRole.color;
         }
         if (record.permissions !== newRole.permissions.bitfield) {
-            record.edits.permissions.push({ at: Date.now(), from: record.permissions, to: newRole.permissions.bitfield });
+            record.edits.permissions.push({
+                at: Date.now(),
+                from: record.permissions,
+                to: newRole.permissions.bitfield,
+            });
             record.permissions = newRole.permissions.bitfield;
         }
 
         getRepository(Role).update(oldRole.id, record);
     }
 
-    private async _userUpdate(oldUser: Discord.User | Discord.PartialUser, newUser: Discord.User | Discord.PartialUser): Promise<void> {
+    private async _userUpdate(
+        oldUser: Discord.User | Discord.PartialUser,
+        newUser: Discord.User | Discord.PartialUser
+    ): Promise<void> {
         if (newUser.partial) await newUser.fetch();
         const record = await getRepository(User).findOne(oldUser.id);
         if (!record) return;
 
         if (record.tag !== oldUser.tag) {
-            record.edits.tag.push({ at: Date.now(), from: record.tag, to: newUser.tag });
+            record.edits.tag.push({
+                at: Date.now(),
+                from: record.tag,
+                to: newUser.tag,
+            });
             record.tag = newUser.tag!;
         }
         if (record.avatar !== newUser.avatar ?? null) {
-            record.edits.avatar.push({ at: Date.now(), from: record.avatar, to: newUser.avatar ?? null });
+            record.edits.avatar.push({
+                at: Date.now(),
+                from: record.avatar,
+                to: newUser.avatar ?? null,
+            });
             record.avatar = newUser.avatar ?? null;
         }
 
