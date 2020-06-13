@@ -26,9 +26,11 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 2.34.0_2ce5ff4d4c428c35a55f8b98c167bebb
   '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.5
   eslint: 6.8.0
-  eslint-plugin-prettier: 3.1.3_eslint@6.8.0
+  eslint-config-prettier: 6.11.0_eslint@6.8.0
+  eslint-plugin-prettier: 3.1.3_eslint@6.8.0+prettier@2.0.5
   husky: 4.2.5
   lint-staged: 10.2.10
+  prettier: 2.0.5
   typescript: 3.9.5
 lockfileVersion: 5.1
 packages:
@@ -649,9 +651,20 @@ packages:
       node: '>=0.8.0'
     resolution:
       integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
-  /eslint-plugin-prettier/3.1.3_eslint@6.8.0:
+  /eslint-config-prettier/6.11.0_eslint@6.8.0:
     dependencies:
       eslint: 6.8.0
+      get-stdin: 6.0.0
+    dev: true
+    hasBin: true
+    peerDependencies:
+      eslint: '>=3.14.1'
+    resolution:
+      integrity: sha512-oB8cpLWSAjOVFEJhhyMZh6NOEOtBVziaqdDQ86+qhDHFbZXoRTM7pNSvFRfW/W/L/LrQ38C99J5CGuRBBzBsdA==
+  /eslint-plugin-prettier/3.1.3_eslint@6.8.0+prettier@2.0.5:
+    dependencies:
+      eslint: 6.8.0
+      prettier: 2.0.5
       prettier-linter-helpers: 1.0.0
     dev: true
     engines:
@@ -930,6 +943,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-I0UBV/XOz1XkIJHEUDMZAbzCThU/H8DxmSfmdGcKPnVhu2VfFqr34jr9777IyaTYvxjedWhqVIilEDsCdP5G6g==
+  /get-stdin/6.0.0:
+    dev: true
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha512-jp4tHawyV7+fkkSKyvjuLZswblUtz+SQKzSWnBbii16BuZksJlU1wuBYXY75r+duh/llF1ur6oNwi+2ZzjKZ7g==
   /get-stream/5.1.0:
     dependencies:
       pump: 3.0.0
@@ -1628,6 +1647,13 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==
+  /prettier/2.0.5:
+    dev: true
+    engines:
+      node: '>=10.13.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
   /prism-media/1.2.2:
     dev: false
     peerDependencies:
@@ -2365,6 +2391,7 @@ specifiers:
   discord.js: discordjs/discord.js
   dotenv: ^8.2.0
   eslint: ^6.8.0
+  eslint-config-prettier: ^6.11.0
   eslint-plugin-prettier: ^3.1.3
   husky: ^4.2.5
   lint-staged: ^10.2.10
@@ -2373,6 +2400,7 @@ specifiers:
   moment-duration-format: ^2.3.2
   node-fetch: ^2.6.0
   pg: ^8.0.3
+  prettier: ^2.0.5
   prompts: ^2.3.2
   readdirp: ^3.4.0
   redis: ^3.0.2
