@@ -34,6 +34,7 @@
     "readdirp": "^3.4.0",
     "redis": "^3.0.2",
     "sha1": "^1.1.1",
+    "tslib": "^2.0.0",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {

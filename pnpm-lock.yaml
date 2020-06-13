@@ -17,6 +17,7 @@ dependencies:
   readdirp: 3.4.0
   redis: 3.0.2
   sha1: 1.1.1
+  tslib: 2.0.0
   typeorm: 0.2.25
 devDependencies:
   '@types/lodash': 4.14.155
@@ -2086,6 +2087,10 @@ packages:
   /tslib/1.13.0:
     resolution:
       integrity: sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+  /tslib/2.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-lTqkx847PI7xEDYJntxZH89L2/aXInsyF2luSafe/+0fHOMjlBNXdH6th7f70qxLDhul7KZK0zC8V5ZIyHl0/g==
   /tsutils/3.17.1_typescript@3.9.5:
     dependencies:
       tslib: 1.13.0
@@ -2405,5 +2410,6 @@ specifiers:
   readdirp: ^3.4.0
   redis: ^3.0.2
   sha1: ^1.1.1
+  tslib: ^2.0.0
   typeorm: ^0.2.24
   typescript: ^3.9.5
