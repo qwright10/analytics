@@ -1,4 +1,9 @@
-# About
+# Apu's Analytics
+[![Build Status](https://travis-ci.org/qwright10/analytics.svg?branch=master)](https://travis-ci.org/qwright10/analytics)
+[![Status](https://top.gg/api/widget/status/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
+[![Status](https://top.gg/api/widget/servers/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
+[![Status](https://top.gg/api/widget/owner/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
+
 Apu's Analytics is a bot for analyzing how your server is used and gives interesting insights into your members.
 
 ## Commands
