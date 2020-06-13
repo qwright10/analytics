@@ -15,7 +15,7 @@ export default class ExecCommand extends Command {
         let hrTime: [number, number] = process.hrtime();
         return exec(
             code,
-            { windowsHide: true, shell: 'powershell' },
+            { windowsHide: true, shell: 'bash' },
             async (err, stdout): Promise<Message | Message[]> => {
                 hrTime = process.hrtime(hrTime);
                 let result = (err ?? stdout) as string;
