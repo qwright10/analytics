@@ -15,13 +15,8 @@ export default class StatsCommand extends Command {
 
     public async exec(message: Message): Promise<Message | Message[]> {
         const cpu = `CPU: ${os.cpus()[0].model}`;
-        const ramstats = [
-            os.freemem() / 1024 / 1024 / 1024,
-            os.totalmem() / 1024 / 1024 / 1024,
-        ];
-        const ram = `RAM: ${ramstats[0].toFixed(2)}GB of ${ramstats[1].toFixed(
-            2
-        )}GB`;
+        const rss = (process.memoryUsage().rss / 1024 / 1024).toFixed(2);
+        const ram = `RAM: ${rss}MB`;
         const arch = `Arch: ${os.platform()}`;
         const uptime = moment
             .duration(this.client.uptime ?? 0)
@@ -32,8 +27,8 @@ export default class StatsCommand extends Command {
         const discord = `D.JS: v${Discord.version}`;
         const akairo = `Akairo: v${Akairo.version}`;
         const commit = execSync(`cd '${__dirname}'; git rev-parse HEAD`, {
-            shell: 'powershell',
             windowsHide: true,
+            shell: Constants.shellType,
         }).toString();
 
         const guilds = await this.client.utils.fetchAndReduce(
