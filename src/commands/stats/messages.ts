@@ -2,7 +2,12 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import { Constants } from '../../structures/util/Constants';
 import { getRepository } from 'typeorm';
-import { Message as MEntity } from '../../structures/db/';
+import {
+    Channel as CEntity,
+    Guild as GEntity,
+    Message as MEntity,
+    User as UEntity,
+} from '../../structures/db/';
 import sha1 from 'sha1';
 
 export default class MessagesCommand extends Command {
@@ -57,30 +62,25 @@ export default class MessagesCommand extends Command {
                 'This can only be used with text channels from this guild.'
             );
 
-        const guildMessages = await getRepository(MEntity).count({
-            guild: message.guild!.id,
-        });
-        const channelMessages = await getRepository(MEntity).count({
-            channel: channel.id,
-        });
-        const userMessages = await getRepository(MEntity).find({
-            author: message.author.id,
-        });
+        const guildMessages = await this._count(GEntity, channel.guild.id);
+        const channelMessages = await this._count(CEntity, channel.id);
+        const userMessages = await this._count(UEntity, user.id);
         const embed = new MessageEmbed()
             .setTitle(`Stats for ${user.tag} in ${channel.name}`)
-            .addField('Guild Messages', guildMessages)
-            .addField('Channel Messages', channelMessages)
-            .addField(
-                'User Guild Messages',
-                userMessages.filter((m) => m.guild === message.guild?.id).length
-            )
-            .addField(
-                'User Channel Messages',
-                userMessages.filter((m) => m.channel === channel.id).length
-            )
-            .addField('User Messages', userMessages.length)
+            .addField('Guild Messages', guildMessages?.messages ?? '0')
+            .addField('Channel Messages', channelMessages?.messages ?? '0')
+            .addField('User Messages', userMessages?.messages ?? '0')
             .setFooter(message.author.tag, message.author.displayAvatarURL())
             .setTimestamp();
         return message.util!.send(embed);
+    }
+
+    private _count<T = Promise<{ messages: number }>>(
+        repo: any,
+        id: any
+    ): Promise<T | undefined> {
+        return getRepository<T>(repo).findOne(id, {
+            select: ['messages' as any],
+        });
     }
 }
