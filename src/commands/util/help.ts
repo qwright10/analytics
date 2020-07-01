@@ -63,8 +63,9 @@ export default class HelpCommand extends Command {
                 : (command.userPermissions as PermissionString[]);
 
         const prefix = await (this.handler.prefix as PrefixSupplier)(message);
+        const usage = command.description.usage;
         const embed = new MessageEmbed().setTitle(
-            `\`${prefix}${command.id}${command.description.usage || ''}\``
+            `\`${prefix}${command.id}${usage ? ` ${usage}` : ''}\``
         );
         if (command.aliases.length > 1)
             embed.addField(
@@ -93,7 +94,8 @@ export default class HelpCommand extends Command {
             embed.addField(
                 'Examples',
                 command.description.examples.map(
-                    (e: string) => `\`${prefix}${command.id} ${e}\``
+                    (e: string) =>
+                        `\`${prefix}${command.id}${e ? ` ${e}` : ''}\``
                 )
             );
         return message.util!.send(embed);
