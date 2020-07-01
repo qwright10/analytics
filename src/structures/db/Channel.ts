@@ -33,6 +33,9 @@ export class Channel {
     @Column({ name: 'topic', type: 'text', nullable: true })
     topic!: string | null;
 
+    @Column({ name: 'messages', type: 'int', default: 0 })
+    messages!: number;
+
     @Column({ name: 'edits', type: 'json' })
     edits!: { [type: string]: { at: number; from: any; to: any }[] };
 }
