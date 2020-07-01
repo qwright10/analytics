@@ -4,12 +4,11 @@ import {
     InhibitorHandler,
     ListenerHandler,
 } from 'discord-akairo';
-import { Message, Intents } from 'discord.js';
+import { Message } from 'discord.js';
 
 import { createConnection } from 'typeorm';
 import Entities from '../structures/db';
 import { SettingsProvider } from '../structures/db/SettingsProvider';
-import { MessageHandler } from './MessageHandler';
 
 import path from 'path';
 import { Logger } from '../structures/util/Logger';
@@ -22,7 +21,6 @@ declare module 'discord-akairo' {
         readonly config: AnalyticsConfig;
         readonly dbl: DBL;
         readonly embeds: Map<string, string>;
-        readonly events: MessageHandler;
         readonly inhibitorHandler: InhibitorHandler;
         readonly listenerHandler: ListenerHandler;
         readonly logger: typeof Logger;
@@ -76,7 +74,6 @@ export class AnalyticsClient extends AkairoClient {
 
     public readonly dbl: DBL = new DBL(process.env.dbl!, this);
     public readonly embeds: Map<string, string> = new Map<string, string>();
-    public readonly events: MessageHandler = new MessageHandler(this);
     public readonly logger: typeof Logger = Logger;
     public readonly settings: SettingsProvider = new SettingsProvider(this);
     public readonly utils: AnalyticsUtils = new AnalyticsUtils(this);
@@ -85,8 +82,8 @@ export class AnalyticsClient extends AkairoClient {
         super(
             { ownerID: config.owner },
             {
-                messageCacheMaxSize: Infinity,
-                messageCacheLifetime: Infinity,
+                messageCacheMaxSize: 1_000,
+                messageCacheLifetime: 120_000,
                 partials: [
                     'CHANNEL',
                     'GUILD_MEMBER',
@@ -95,8 +92,11 @@ export class AnalyticsClient extends AkairoClient {
                     'USER',
                 ],
                 fetchAllMembers: true,
-                presence: { status: 'dnd' },
-                ws: { intents: Intents.ALL },
+                ws: {
+                    properties: {
+                        $browser: 'Discord iOS',
+                    },
+                } as any,
             }
         );
     }
@@ -130,8 +130,8 @@ export class AnalyticsClient extends AkairoClient {
             url: process.env.pg,
             type: 'postgres',
             entities: Entities,
-            synchronize: !!process.env.pgsync,
-            logging: !!process.env.pglog,
+            synchronize: true,
+            logging: false,
             cache: true,
         }).catch((e): any => {
             this.logger.error(`Failed to connect to postgres db:\n${e}`);
@@ -142,9 +142,6 @@ export class AnalyticsClient extends AkairoClient {
         this.logger.log(
             `Settings provider initialized: ${this.settings.cache.size}`
         );
-
-        this.events.registerAll();
-        this.logger.log('Message Handler initialized');
 
         this.logger.log('Logging in...');
         return this.login(this.config.token);

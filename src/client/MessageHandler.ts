@@ -1,6 +1,5 @@
-import { AnalyticsClient } from './AnalyticsClient';
-import { getRepository } from 'typeorm';
-import {
+import { createConnection, getRepository } from 'typeorm';
+import Entities, {
     Channel,
     Emoji,
     Event,
@@ -13,16 +12,56 @@ import {
 } from '../structures/db';
 import Discord from 'discord.js';
 import sha1 from 'sha1';
+import { Logger } from '../structures/util/Logger';
+
+(async function () {
+    if (process.env.logger_started) return;
+    else process.env.logger_started = 'true';
+
+    const client = new Discord.Client({
+        messageCacheMaxSize: 10_000,
+        messageCacheLifetime: 120_000,
+        partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
+        fetchAllMembers: true,
+        ws: {
+            properties: {
+                $browser: 'Discord iOS',
+            },
+        } as any,
+        shards: 'auto',
+    });
+
+    await createConnection({
+        name: 'default',
+        url: process.env.pg,
+        type: 'postgres',
+        entities: Entities,
+        synchronize: true,
+        logging: false,
+    }).catch((e) => {
+        Logger.error(`Failed to connect to postgres db:\n${e}`);
+        return process.exit(1);
+    });
+
+    const events = new MessageHandler(client);
+    events.registerAll();
+    Logger.info('Registered all client events');
+
+    await client.login(process.env.token);
+
+    client.on('ready', () => Logger.info(`Logged in as ${client.user?.tag}`));
+})();
 
 export const presenceSymbol = Symbol('presences');
+export const filename = __filename;
 
 export class MessageHandler {
-    public readonly client: AnalyticsClient;
+    public readonly client: Discord.Client;
     public readonly cache = new Map<string, any>();
     public readonly queue: any[] = [];
     public readonly intervals = new Map<Symbol, NodeJS.Timeout>();
 
-    public constructor(client: AnalyticsClient) {
+    public constructor(client: Discord.Client) {
         this.client = client;
         this.intervals.set(
             presenceSymbol,
@@ -165,10 +204,10 @@ export class MessageHandler {
         if (!record) return;
 
         let [name, parent, permissionOverwrites, topic] = [
-            record.edits.name,
-            record.edits.parent,
-            record.edits.permissionOverwrites,
-            record.edits.topic,
+            record.edits.name ?? [],
+            record.edits.parent ?? [],
+            record.edits.permissionOverwrites ?? [],
+            record.edits.topic ?? [],
         ];
         const channelName =
             oldChannel instanceof Discord.DMChannel
@@ -409,10 +448,7 @@ export class MessageHandler {
             content: sha1(message.content),
             rawContent: message.content,
             deleted: false,
-            createdAt: message.createdAt
-                .toISOString()
-                .replace('T', ' ')
-                .replace('Z', ''),
+            createdAt: dateToPG(message.createdAt),
             embeds: message.embeds.map((e) => e.toJSON()),
             reactions: [],
             edits: {
@@ -421,7 +457,24 @@ export class MessageHandler {
             },
         };
 
+        if (message.guild)
+            getRepository(Guild).increment(
+                { id: message.guild.id },
+                'messages',
+                1
+            );
         getRepository(Message).insert(data);
+        getRepository(Channel).increment(
+            { id: message.channel.id },
+            'messages',
+            1
+        );
+        if (message.guild)
+            getRepository(Guild).increment(
+                { id: message.guild.id },
+                'messages',
+                1
+            );
     }
 
     private _messageDelete(

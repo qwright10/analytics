@@ -1,12 +1,21 @@
 import { ShardingManager, Shard } from 'discord.js';
 import { Logger } from './structures/util/Logger';
-require('dotenv').config({ path: `${__dirname}/../.env` });
+import { filename } from './client/MessageHandler';
+import { fork } from 'child_process';
+
+const events = fork(filename);
+events.stdout?.pipe(process.stdout);
 
 const options: any = {
     totalShards: 2,
     respawn: true,
     mode: 'worker',
-    execArgv: ['--inspect', '--experimental-worker'],
+    execArgv: [
+        '--experimental-worker',
+        '--expose-gc',
+        '--max_old_space_size=4096',
+        '--trace-warnings',
+    ],
 };
 
 const manager = new ShardingManager('./build/start.js', options);
@@ -19,5 +28,15 @@ manager.on('shardCreate', (shard: Shard) => {
     shard.on('error', (error: Error) =>
         Logger.error(`Shard ${shard.id} error: ${error}`)
     );
+    shard.on('message', (message) => {
+        try {
+            if (typeof message === 'string') message = JSON.parse(message);
+            if (typeof message !== 'object') return;
+        } catch {
+            return;
+        }
+
+        manager.shards.get(message.shard)?.respawn();
+    });
 });
 manager.spawn();
