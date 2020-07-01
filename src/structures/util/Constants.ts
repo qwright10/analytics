@@ -6,6 +6,7 @@ import {
     InhibitorOptions,
     ListenerOptions,
 } from 'discord-akairo';
+import os from 'os';
 
 export const Constants = {
     commands: {
@@ -179,6 +180,24 @@ export const Constants = {
                     id: 'user',
                     type: 'user',
                     default: (message: Message) => message.author,
+                },
+            ],
+        },
+
+        server: {
+            aliases: ['server', 'guild'],
+            description: {
+                value: 'Provides statistics about a guild',
+                usage: '[ID]',
+                examples: ['', '631198410212376620'],
+            },
+            category: 'stats',
+            clientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
+            args: [
+                {
+                    id: 'guild',
+                    type: Argument.compose('guild', 'string'),
+                    default: (message: Message) => message.guild,
                 },
             ],
         },
@@ -376,6 +395,8 @@ export const Constants = {
             category: 'client',
         },
     } as C<ListenerOptions>,
+
+    shellType: os.platform() === 'win32' ? 'powershell' : 'bash',
 };
 
 type C<T> = { [id: string]: T };
