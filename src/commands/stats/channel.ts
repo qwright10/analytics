@@ -20,7 +20,7 @@ export default class ChannelCommand extends Command {
         const id = channel.id;
 
         const channelRecord: any =
-            (await getRepository(CEntity).findOne({ id })) ||
+            (await getRepository(CEntity).findOne(id)) ||
             this.client.channels.cache.get(id);
         const guildRecord = await getRepository(GEntity).findOne({
             id:
