@@ -1,6 +1,6 @@
 import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
     @Generated()
     @Column({ name: 'uid' })
@@ -26,6 +26,9 @@ export class User {
 
     @Column({ name: 'leaves', type: 'json' })
     leaves!: { at: number; id: string }[];
+
+    @Column({ name: 'messages', type: 'int', default: 0 })
+    messages!: number;
 
     @Column({ name: 'edits', type: 'json' })
     edits!: { [type: string]: { at: number; from: any; to: any }[] };

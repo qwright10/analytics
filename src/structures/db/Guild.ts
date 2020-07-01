@@ -21,17 +21,20 @@ export class Guild {
     @Column({ name: 'createdAt', type: 'timestamp without time zone' })
     createdAt!: string;
 
-    @Column({ name: 'deleted', type: 'boolean' })
+    @Column({ name: 'deleted', type: 'boolean', default: false })
     deleted!: boolean;
 
-    @Column({ name: 'joins', type: 'json' })
+    @Column({ name: 'joins', type: 'json', default: [] })
     joins!: { at: number; id: string }[];
 
-    @Column({ name: 'leaves', type: 'json' })
+    @Column({ name: 'leaves', type: 'json', default: [] })
     leaves!: { at: number; id: string }[];
 
     @Column({ name: 'bans', type: 'json' })
     bans!: string[];
+
+    @Column({ name: 'messages', type: 'int', default: 0 })
+    messages!: number;
 
     @Column({ name: 'edits', type: 'json' })
     edits!: { [type: string]: { at: number; from: any; to: any }[] };
