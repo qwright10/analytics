@@ -5,17 +5,16 @@ dependencies:
   chart.js: 2.9.3
   common-tags: 1.8.0
   dblapi.js: 2.4.0
-  discord-akairo: github.com/discord-akairo/discord-akairo/fd125b19fe6afd0fac30a94c20a94a9e79cc23da_discord.js@12.2.0
-  discord.js: github.com/discordjs/discord.js/1c275afd7cee4b3663a04f77b0271ac80e927a5e
+  discord-akairo: github.com/discord-akairo/discord-akairo/e11316409e5417c2151a2840c8a81d381736471d_discord.js@12.2.0
+  discord.js: github.com/discordjs/discord.js/ae716872b9d9f711c0f7240a9dbd951d99a9c0ee
   dotenv: 8.2.0
   lodash: 4.17.15
-  moment: 2.26.0
+  moment: 2.27.0
   moment-duration-format: 2.3.2
   node-fetch: 2.6.0
   pg: 8.2.1_pg@8.2.1
   prompts: 2.3.2
   readdirp: 3.4.0
-  redis: 3.0.2
   sha1: 1.1.1
   tslib: 2.0.0
   typeorm: 0.2.25
@@ -88,14 +87,19 @@ packages:
       integrity: sha512-vEcX7S7aPhsBCivxMwAANQburHBtfN9RdyXFk84IJmu2Z4Hkg1tOFgaslRiEqqvoLtbCBi6ika1EMspE+NZ9Lg==
   /@types/node-fetch/2.5.7:
     dependencies:
-      '@types/node': 14.0.13
+      '@types/node': 14.0.14
       form-data: 3.0.0
     dev: false
     resolution:
       integrity: sha512-o2WVNf5UhWRkxlf6eq+jMZDu7kjgpgJfl4xVNlvryc95O/6F2ld8ztKX+qu+Rjyet93WAWm5LjeX9H5FGkODvw==
   /@types/node/14.0.13:
+    dev: true
     resolution:
       integrity: sha512-rouEWBImiRaSJsVA+ITTFM6ZxibuAlTuNOCyxVbwreu6k6+ujs7DfnU9o+PShFhET78pMBl3eH+AGSI5eOTkPA==
+  /@types/node/14.0.14:
+    dev: false
+    resolution:
+      integrity: sha512-syUgf67ZQpaJj01/tRTknkMNoBBLWJOBODF0Zm4NrXmiSuxjymFrxnTu1QVYRubhVkRcZLYZG8STTwJRdVm/WQ==
   /@types/parse-json/4.0.0:
     dev: true
     resolution:
@@ -404,7 +408,7 @@ packages:
   /chart.js/2.9.3:
     dependencies:
       chartjs-color: 2.4.1
-      moment: 2.26.0
+      moment: 2.27.0
     dev: false
     resolution:
       integrity: sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==
@@ -595,12 +599,6 @@ packages:
       node: '>=0.4.0'
     resolution:
       integrity: sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
-  /denque/1.4.1:
-    dev: false
-    engines:
-      node: '>=0.10'
-    resolution:
-      integrity: sha512-OfzPuSZKGcgr96rf1oODnfjqBFmr1DVoc/TrItj3Ohe0Ah1C5WX5Baquw/9U9KovnQ88EqmJbD66rKYUQYN1tQ==
   /doctrine/3.0.0:
     dependencies:
       esutils: 2.0.3
@@ -1334,10 +1332,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-cBMXjSW+fjOb4tyaVHuaVE/A5TqkukDWiOfxxAjY+PEqmmBQlLwn+8OzwPiG3brouXKY5Un4pBjAeB6UToXHaQ==
-  /moment/2.26.0:
+  /moment/2.27.0:
     dev: false
     resolution:
-      integrity: sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
+      integrity: sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
   /ms/2.1.2:
     resolution:
       integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
@@ -1709,35 +1707,6 @@ packages:
       node: '>=8.10.0'
     resolution:
       integrity: sha512-0xe001vZBnJEK+uKcj8qOhyAKPzIT+gStxWr3LCB0DwcXR5NZJ3IaC+yGnHCYzB/S7ov3m3EEbZI2zeNvX+hGQ==
-  /redis-commands/1.5.0:
-    dev: false
-    resolution:
-      integrity: sha512-6KxamqpZ468MeQC3bkWmCB1fp56XL64D4Kf0zJSwDZbVLLm7KFkoIcHrgRvQ+sk8dnhySs7+yBg94yIkAK7aJg==
-  /redis-errors/1.2.0:
-    dev: false
-    engines:
-      node: '>=4'
-    resolution:
-      integrity: sha1-62LSrbFeTq9GEMBK/hUpOEJQq60=
-  /redis-parser/3.0.0:
-    dependencies:
-      redis-errors: 1.2.0
-    dev: false
-    engines:
-      node: '>=4'
-    resolution:
-      integrity: sha1-tm2CjNyv5rS4pCin3vTGvKwxyLQ=
-  /redis/3.0.2:
-    dependencies:
-      denque: 1.4.1
-      redis-commands: 1.5.0
-      redis-errors: 1.2.0
-      redis-parser: 3.0.0
-    dev: false
-    engines:
-      node: '>=6'
-    resolution:
-      integrity: sha512-PNhLCrjU6vKVuMOyFu7oSP296mwBkcE6lrAjruBYG5LgdSqtRBoVQIylrMyVZD/lkF24RSNNatzvYag6HRBHjQ==
   /reflect-metadata/0.1.13:
     dev: false
     resolution:
@@ -2053,18 +2022,18 @@ packages:
       integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
   /thenify-all/1.6.0:
     dependencies:
-      thenify: 3.3.0
+      thenify: 3.3.1
     dev: false
     engines:
       node: '>=0.8'
     resolution:
       integrity: sha1-GhkY1ALY/D+Y+/I02wvMjMEOlyY=
-  /thenify/3.3.0:
+  /thenify/3.3.1:
     dependencies:
       any-promise: 1.3.0
     dev: false
     resolution:
-      integrity: sha1-5p44obq+lpsBCCB5eLn2K4hgSDk=
+      integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   /through/2.3.8:
     resolution:
       integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
@@ -2326,11 +2295,11 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-92O1HWEjw27sBfgmXiixJWT5hRBp2eobqXicLtPBIDBhYB+1HpwZlXmbW2luivBJHBzki+7VyCLRtAkScbTBQA==
-  github.com/discord-akairo/discord-akairo/fd125b19fe6afd0fac30a94c20a94a9e79cc23da_discord.js@12.2.0:
+  github.com/discord-akairo/discord-akairo/e11316409e5417c2151a2840c8a81d381736471d_discord.js@12.2.0:
     dependencies:
-      discord.js: github.com/discordjs/discord.js/1c275afd7cee4b3663a04f77b0271ac80e927a5e
+      discord.js: github.com/discordjs/discord.js/ae716872b9d9f711c0f7240a9dbd951d99a9c0ee
     dev: false
-    id: github.com/discord-akairo/discord-akairo/fd125b19fe6afd0fac30a94c20a94a9e79cc23da
+    id: github.com/discord-akairo/discord-akairo/e11316409e5417c2151a2840c8a81d381736471d
     name: discord-akairo
     peerDependencies:
       discord.js: ^12.0.0
@@ -2338,10 +2307,9 @@ packages:
       sequelize: ^5.2.12
       sqlite: ^3.0.3
     resolution:
-      registry: 'https://registry.npmjs.org/'
-      tarball: 'https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/fd125b19fe6afd0fac30a94c20a94a9e79cc23da'
+      tarball: 'https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/e11316409e5417c2151a2840c8a81d381736471d'
     version: 8.0.0
-  github.com/discordjs/discord.js/1c275afd7cee4b3663a04f77b0271ac80e927a5e:
+  github.com/discordjs/discord.js/ae716872b9d9f711c0f7240a9dbd951d99a9c0ee:
     dependencies:
       '@discordjs/collection': 0.1.5
       '@discordjs/form-data': 3.0.1
@@ -2355,29 +2323,8 @@ packages:
     engines:
       node: '>=12.0.0'
     name: discord.js
-    peerDependencies:
-      bufferutil: ^4.0.1
-      erlpack: discordapp/erlpack
-      libsodium-wrappers: ^0.7.6
-      sodium: ^3.0.2
-      utf-8-validate: ^5.0.2
-      zlib-sync: ^0.1.6
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      erlpack:
-        optional: true
-      libsodium-wrappers:
-        optional: true
-      sodium:
-        optional: true
-      utf-8-validate:
-        optional: true
-      zlib-sync:
-        optional: true
     resolution:
-      registry: 'https://registry.npmjs.org/'
-      tarball: 'https://codeload.github.com/discordjs/discord.js/tar.gz/1c275afd7cee4b3663a04f77b0271ac80e927a5e'
+      tarball: 'https://codeload.github.com/discordjs/discord.js/tar.gz/ae716872b9d9f711c0f7240a9dbd951d99a9c0ee'
     version: 12.2.0
 specifiers:
   '@types/common-tags': ^1.8.0
@@ -2388,12 +2335,12 @@ specifiers:
   '@types/ws': ^7.2.5
   '@typescript-eslint/eslint-plugin': ^2.30.0
   '@typescript-eslint/parser': ^2.30.0
-  chalk: ^4.0.0
+  chalk: ^4.1.0
   chart.js: ^2.9.3
   common-tags: ^1.8.0
   dblapi.js: ^2.4.0
-  discord-akairo: discord-akairo/discord-akairo
-  discord.js: discordjs/discord.js
+  discord-akairo: 'github:discord-akairo/discord-akairo'
+  discord.js: 'github:discordjs/discord.js'
   dotenv: ^8.2.0
   eslint: ^6.8.0
   eslint-config-prettier: ^6.11.0
@@ -2401,15 +2348,14 @@ specifiers:
   husky: ^4.2.5
   lint-staged: ^10.2.10
   lodash: ^4.17.15
-  moment: ^2.25.1
+  moment: ^2.27.0
   moment-duration-format: ^2.3.2
   node-fetch: ^2.6.0
-  pg: ^8.0.3
+  pg: ^8.2.1
   prettier: ^2.0.5
   prompts: ^2.3.2
   readdirp: ^3.4.0
-  redis: ^3.0.2
   sha1: ^1.1.1
   tslib: ^2.0.0
-  typeorm: ^0.2.24
+  typeorm: ^0.2.25
   typescript: ^3.9.5
