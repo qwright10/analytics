@@ -1,10 +1,9 @@
-# Apu's Analytics
-[![Build Status](https://travis-ci.org/qwright10/analytics.svg?branch=master)](https://travis-ci.org/qwright10/analytics)
+# Shrimp
 [![Status](https://top.gg/api/widget/status/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
 [![Status](https://top.gg/api/widget/servers/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
 [![Status](https://top.gg/api/widget/owner/586995575686168595.svg?noavatar=true)](https://top.gg/bot/586995575686168595)
 
-Apu's Analytics is a bot for analyzing how your server is used and gives interesting insights into your members.
+Shrimp is a bot for analyzing how your server is used and gives interesting insights into your members.
 
 ## Commands
 A list of some basic commands and short descriptions
@@ -31,7 +30,7 @@ A list of some basic commands and short descriptions
 * Add complex stats
 
 ## Status
-Apu's Analytics is up almost 100% of the time and numerous updates to performance and to add new features are implemented daily.
+Shrimp is up almost 100% of the time and numerous updates to performance and to add new features are implemented daily.
 
 ## Invite
 [**Discord**](https://discord.com/api/oauth2/authorize?client_id=586995575686168595&permissions=18496&scope=bot)
