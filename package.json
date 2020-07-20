@@ -1,62 +1,62 @@
 {
-  "name": "analytics",
-  "version": "1.0.0",
-  "description": "📈 A typescript-based server analytics bot for Discord. ",
-  "main": "build/index.js",
-  "repository": "https://github.com/qwright10/analytics-bot.git",
-  "author": "Quentin Wright <wrightq00@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "scripts": {
-    "build": "tsc -p .",
-    "watch": "tsc -p . --watch",
-    "start": "pm2 start ./ecosystem.config.js -n analytics && pm2 logs",
-    "restart": "pm2 restart ./ecosystem.config.js && pm2 logs",
-    "stop": "pm2 stop ./ecosystem.config.js",
-    "lint-staged": "lint-staged"
-  },
-  "dependencies": {
-    "@types/common-tags": "^1.8.0",
-    "@types/node-fetch": "^2.5.7",
-    "chalk": "^4.1.0",
-    "chart.js": "^2.9.3",
-    "common-tags": "^1.8.0",
-    "dblapi.js": "^2.4.0",
-    "discord-akairo": "github:discord-akairo/discord-akairo",
-    "discord.js": "github:discordjs/discord.js",
-    "dotenv": "^8.2.0",
-    "lodash": "^4.17.19",
-    "moment": "^2.27.0",
-    "moment-duration-format": "^2.3.2",
-    "node-fetch": "^2.6.0",
-    "pg": "^8.2.1",
-    "prompts": "^2.3.2",
-    "readdirp": "^3.4.0",
-    "sha1": "^1.1.1",
-    "tslib": "^2.0.0",
-    "typeorm": "^0.2.25"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.155",
-    "@types/node": "^14.0.11",
-    "@types/sha1": "^1.1.2",
-    "@types/ws": "^7.2.5",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.3",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.10",
-    "prettier": "^2.0.5",
-    "typescript": "^3.9.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "analytics",
+    "version": "1.0.0",
+    "description": "📈 A typescript-based server analytics bot for Discord. ",
+    "main": "build/index.js",
+    "repository": "https://github.com/qwright10/analytics-bot.git",
+    "author": "Quentin Wright <wrightq00@gmail.com>",
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "build": "tsc -p .",
+        "watch": "tsc -p . --watch",
+        "start": "pm2 start ./ecosystem.config.js -n analytics && pm2 logs",
+        "restart": "pm2 restart ./ecosystem.config.js && pm2 logs",
+        "stop": "pm2 stop ./ecosystem.config.js",
+        "lint-staged": "lint-staged"
+    },
+    "dependencies": {
+        "@types/common-tags": "^1.8.0",
+        "@types/node-fetch": "^2.5.7",
+        "chalk": "^4.1.0",
+        "chart.js": "^2.9.3",
+        "common-tags": "^1.8.0",
+        "dblapi.js": "^2.4.0",
+        "discord-akairo": "github:discord-akairo/discord-akairo",
+        "discord.js": "github:discordjs/discord.js",
+        "dotenv": "^8.2.0",
+        "lodash": "^4.17.19",
+        "moment": "^2.27.0",
+        "moment-duration-format": "^2.3.2",
+        "node-fetch": "^2.6.0",
+        "pg": "^8.2.1",
+        "prompts": "^2.3.2",
+        "readdirp": "^3.4.0",
+        "sha1": "^1.1.1",
+        "tslib": "^2.0.0",
+        "typeorm": "^0.2.25"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.155",
+        "@types/node": "^14.0.11",
+        "@types/sha1": "^1.1.2",
+        "@types/ws": "^7.2.5",
+        "@typescript-eslint/eslint-plugin": "^2.30.0",
+        "@typescript-eslint/parser": "^2.30.0",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.3",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.10",
+        "prettier": "^2.0.5",
+        "typescript": "^3.9.5"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": "eslint --cache --fix"
     }
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix"
-  }
 }
